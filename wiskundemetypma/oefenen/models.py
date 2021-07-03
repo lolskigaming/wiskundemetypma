@@ -30,4 +30,3 @@ class Vaardigheid(models.Model):
 
     class Meta:
         ordering = ['bijbehorend_onderwerp', 'nummer']
-
