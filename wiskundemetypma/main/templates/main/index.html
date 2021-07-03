@@ -1,9 +1,13 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>WiskundeMetYpma</title>
-    </head>
-    <body>
-        <h1>HOI</h1>
-    </body>
-</html>
+{% extends "main/layout.html" %}
+{% block head%}
+    <script>
+        $(document).ready( ()=> {
+            
+            // Make the home item appear selected
+            $(".navbaritem:contains('home')").css('background-color', 'var(--primarydarken)')
+        })
+    </script>
+{% endblock %}
+{% block body %}
+    <h1>hOIS</h1>
+{% endblock %}
