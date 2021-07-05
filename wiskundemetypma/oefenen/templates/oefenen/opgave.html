@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Opgave</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        .nakijken {
+            display: none;
+        }
+    </style>
+    <script>
+        function nakijken() {
+            var ClassNakijken = document.getElementsByClassName("nakijken");
+            for (var i = 0; i < ClassNakijken.length; i++) {
+                ClassNakijken[i].style.display = 'block'
+            }
+            document.getElementById("nakijken").style.display = "none";
+        }
+    </script>
+</head>
+<body>
+    <h1>Opgave bij {{ opdracht.vaardigheid.naam }}</h1><br>
+    <div id="opgave">{{ o.opdracht|safe }}</div>
+
+    {% if opdracht.plaatje %}
+    <div id="plaatje"><img src="{{ opdracht.plaatje.url }}"></div>
+    {% endif %}
+    
+    <pre><div class="nakijken" id="antwoord">{{ o.antwoord }}</div></pre>
+    <pre><div class="nakijken" id="uitwerking">{{ o.uitwerking }}</div></pre>
+    <button id="nakijken" onclick="nakijken()">Nakijken</button>
+
+
+    <div class="nakijken">
+        <form method="post" id=score action="{% url 'volgende' %}">
+            {% csrf_token %}
+                <input type="hidden" id="letter" name="letter" value="{{ letter }}">
+                <input type="hidden" id="pk" name="pk" value="{{ pk }}">
+                <input type="hidden" id="opdracht" name="opdracht" value="{{ opdracht.opgave }}">
+
+                <input type="radio" id="goed" name="score" value="1">
+                    <label for="goed">Goed</label><br>
+                <input type="radio" id="bijna_goed" name="score" value="0.5">
+                    <label for="bijna_goed">Goed, op een rekenfout na</label><br>
+                <input type="radio" id="half_goed" name="score" value="0">
+                    <label for="half_goed">Voor de helft goed</label><br>
+                <input type="radio" id="fout" name="score" value="-1">
+                    <label for="fout">Fout</label><br>
+            <input type="submit" value="Volgende">
+        </form>
+    </div>
+    <input type="hidden" id="letter" name="letter" value="{{ letter }}">
+    <input type="hidden" id="pk" name="pk" value="{{ pk }}">
+</body>
+</html>
