@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.deletion import PROTECT
 
 # Create your models here.
 
@@ -30,3 +32,36 @@ class Vaardigheid(models.Model):
 
     class Meta:
         ordering = ['bijbehorend_onderwerp', 'nummer']
+
+class Opgave(models.Model):
+    opgave = models.TextField()
+    vaardigheid = models.ForeignKey(Vaardigheid, on_delete=models.PROTECT)
+    antwoord = models.CharField(max_length=255)
+    uitwerking = models.TextField()
+
+    def __str__(self):
+        return "Opgave bij " + self.vaardigheid.naam + ": " + self.opgave
+    
+    class Meta:
+        ordering = ['vaardigheid', 'pk']
+
+class Gebruiker(models.Model):
+    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    score = models.FloatField(default=0)
+    intensiteit = models.IntegerField(default=3)
+
+class Voortgang(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    vaardigheid = models.ForeignKey(Vaardigheid, on_delete=models.PROTECT)
+    voortgang = models.FloatField(default=0)
+    
+    def __str__(self):
+        return "Voortgang van " + str(self.user) + " voor " + str(self.vaardigheid) + " is " + str(self.voortgang)
+
+class OpdrachtVoortgang(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    opdracht = models.ForeignKey(Opgave, on_delete=PROTECT)
+    hoevaak_gedaan = models.IntegerField(default=0)
+
+    def __str__(self):
+        return str(self.user) + " heeft de opdracht \"" + self.opdracht.opgave + "\" " + str(self.hoevaak_gedaan) + " keer gedaan"

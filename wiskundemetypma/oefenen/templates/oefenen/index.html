@@ -8,7 +8,6 @@
 </head>
 <body>
     <h1>Welkom op Wiskunde met Ypma - kies welke vaardigheid je wilt oefenen</h1>
-    {{ onderwerpen }}
     <ul>
         {% for o in onderwerpen %}
         <li><a href="/oefenen/{{o.1 }}/{{ o.2 }}">{{ o.0 }}</a></li>
