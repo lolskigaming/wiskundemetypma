@@ -35,6 +35,7 @@ class Vaardigheid(models.Model):
 
 class Opgave(models.Model):
     opgave = models.TextField()
+    plaatje = models.ImageField(blank=True, null=True, upload_to='images/')
     vaardigheid = models.ForeignKey(Vaardigheid, on_delete=models.PROTECT)
     antwoord = models.CharField(max_length=255)
     uitwerking = models.TextField()
