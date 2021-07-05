@@ -3,6 +3,10 @@
     <script>
         $(document).ready( ()=> {
             
+            // Animate the content entrance
+            
+            $('#content').addClass('contentwelcome');
+
             // Make the home item appear selected
             $(".navbaritem:contains('registreren')").css('background-color', 'var(--primarydarken)');
         })
@@ -51,30 +55,11 @@
             box-shadow: var(--box-shadow4dp);
         }
 
-        .inputwrapper {
-            width: 100%;
-            height: 80px;
-        }
+        
 
         .shake-horizontal {
 	        -webkit-animation: shake-horizontal 1s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
 	        animation: shake-horizontal 1s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
-        }
-
-        .regbutton {
-            border: none;
-            border-radius: 0px;
-            height: 34px;
-            width: 180px;
-            background-color: var(--primarydarken);
-            color: white;
-            font-size: 16px;
-            font-family: Roboto Mono;
-            font-weight: 500;
-        }
-
-        .regbutton:hover {
-            box-shadow: var(--box-shadow4dp);
         }
 
         @-webkit-keyframes shake-horizontal {
@@ -149,7 +134,7 @@
                     {% endfor %}
                 </div>
             {% endfor %}
-            <button type="submit" name="submit" value="Register" class="regbutton">Registreer!</button></td>
+            <button type="submit" name="submit" value="Register" class="submitbutton">Registreer!</button></td>
            
             
         </form>

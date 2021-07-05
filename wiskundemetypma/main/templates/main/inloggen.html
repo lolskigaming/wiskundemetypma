@@ -3,6 +3,10 @@
     <script>
         $(document).ready( ()=> {
             
+            // Animate the content entrance
+            
+            $('#content').addClass('contentwelcome');
+
             // Make the home item appear selected
             $(".navbaritem:contains('inloggen')").css('background-color', 'var(--primarydarken)')
         })
@@ -29,6 +33,13 @@
             outline: none !important;
             box-shadow: var(--box-shadow4dp);
         }
+
+        label {
+            color: var(--whitetext);
+            font-size: 16px;
+            pointer-events: none;
+        }
+
     </style>
 {% endblock %}
 {% block body %}
@@ -39,11 +50,15 @@
             {% if request.GET.next %}
             <input type="hidden" name="next" value="{{ request.GET.next }}">
             {% endif %}
-            
-            <input type="text" name="username" autofocus required>
-            <input type="password" name="password" required>
-
-            <button type="submit" value="login">login</button>
+            <div class="inputwrapper">
+                <label>gebruikersnaam:</label><br>
+                <input type="text" name="username" autofocus required><br>
+            </div>
+            <div class="inputwrapper">
+                <label>wachtwoord:</label><br>
+                <input type="password" name="password" required><br>
+            </div>
+            <button type="submit" value="login" class="submitbutton">login</button>
         </form>
     </div>
 {% endblock %}

@@ -16,15 +16,24 @@
     </head>
     <script>
         $(document).ready(function() {
-
+            
             var screeny =  $(document).height();
             var screenx = $(document).width();
 
             $('#page').css('height', (screeny - 380).toString() + 'px');
 
             $('.navbaritem').click( function(event) {
-                var link = $(this).html();
-                window.location.href = "{% url 'blog' %}".replace(/blog/, link.toString());
+                
+                $('#content').removeClass('contentwelcome');
+                $('#content').addClass('contentbegone');
+                
+                event.preventDefault();
+                
+                window.setTimeout( ()=> {
+                    var link = $(this).html();
+                    window.location.href = "{% url 'blog' %}".replace(/blog/, link.toString());
+                }, 500);
+                
             });
         });
     </script>
@@ -150,12 +159,95 @@
             padding-top: 80px;
         }
 
+        .contentbegone {
+            -webkit-animation: contentbegone 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: contentbegone 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        }
+
+        @-webkit-keyframes contentbegone {
+        0% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateX(-100%);
+                    transform: translateX(-100%);
+            opacity: 0;
+        }
+        }
+        @keyframes contentbegone {
+        0% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateX(-100%);
+                    transform: translateX(-100%);
+            opacity: 0;
+        }
+        }
+
+        .contentwelcome {
+            -webkit-animation: contentwelcome 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: contentwelcome 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+        }
+
+        @-webkit-keyframes contentwelcome {
+        0% {
+            -webkit-transform: translateX(100%);
+                    transform: translateX(100%);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        }
+        @keyframes contentwelcome {
+        0% {
+            -webkit-transform: translateX(100%);
+                    transform: translateX(100%);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        }
+
+
+
         #footer {
             width: 100%;
             height: 240px;
             background-color: var(--dmbglighten);
             position: relative;
             bottom: 0px;
+        }
+
+        .submitbutton {
+            border: none;
+            border-radius: 0px;
+            height: 34px;
+            width: 180px;
+            background-color: var(--primarydarken);
+            color: white;
+            font-size: 16px;
+            font-family: Roboto Mono;
+            font-weight: 500;
+        }
+
+        .submitbutton:hover {
+            box-shadow: var(--box-shadow4dp);
+        }
+
+        .inputwrapper {
+            width: 100%;
+            height: 80px;
         }
     </style>
     <body>
@@ -170,7 +262,7 @@
             <div class="navbaritem" style="float: right;" href="{% url 'inloggen' %}">inloggen</div>
         </div>
         <div id="page">
-            <div id="content">
+            <div id="content" class="contentbegone contentwelcome">
                 {% block body%}
 
                 {% endblock %}
