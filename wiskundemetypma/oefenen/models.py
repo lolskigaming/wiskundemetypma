@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import PROTECT
+from ckeditor.fields import RichTextField
 
 # Create your models here.
 
@@ -34,11 +35,11 @@ class Vaardigheid(models.Model):
         ordering = ['bijbehorend_onderwerp', 'nummer']
 
 class Opgave(models.Model):
-    opgave = models.TextField()
+    opgave = RichTextField()
     plaatje = models.ImageField(blank=True, null=True, upload_to='images/')
     vaardigheid = models.ForeignKey(Vaardigheid, on_delete=models.PROTECT)
     antwoord = models.CharField(max_length=255)
-    uitwerking = models.TextField()
+    uitwerking = RichTextField()
 
     def __str__(self):
         return "Opgave bij " + self.vaardigheid.naam + ": " + self.opgave
