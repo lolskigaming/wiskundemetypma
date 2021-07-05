@@ -1,0 +1,49 @@
+{% extends "main/layout.html" %}
+{% block head%}
+    <script>
+        $(document).ready( ()=> {
+            
+            // Make the home item appear selected
+            $(".navbaritem:contains('inloggen')").css('background-color', 'var(--primarydarken)')
+        })
+    </script>
+    <style>
+        input[required] {
+            border: none;
+            border-radius: 0px;
+            padding: 8px;
+            width: 240px;
+            font-size: 16px;
+            margin-top: 8px;
+            margin-bottom: 8px;
+            background-color: var(--dmbglighten);
+            color: var(--whitetext);
+            box-shadow: none;
+        }
+
+        input[required]:hover {
+            box-shadow: var(--box-shadow4dp);
+        }
+
+        input[required]:focus {
+            outline: none !important;
+            box-shadow: var(--box-shadow4dp);
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            
+            {% if request.GET.next %}
+            <input type="hidden" name="next" value="{{ request.GET.next }}">
+            {% endif %}
+            
+            <input type="text" name="username" autofocus required>
+            <input type="password" name="password" required>
+
+            <button type="submit" value="login">login</button>
+        </form>
+    </div>
+{% endblock %}

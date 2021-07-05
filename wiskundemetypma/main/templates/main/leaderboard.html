@@ -1,0 +1,13 @@
+{% extends "main/layout.html" %}
+{% block head%}
+    <script>
+        $(document).ready( ()=> {
+            
+            // Make the home item appear selected
+            $(".navbaritem:contains('leaderboard')").css('background-color', 'var(--primarydarken)')
+        })
+    </script>
+{% endblock %}
+{% block body %}
+    <h1>dit is leaderboard</h1>
+{% endblock %}

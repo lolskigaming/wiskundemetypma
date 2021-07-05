@@ -1,0 +1,13 @@
+{% extends "main/layout.html" %}
+{% block head%}
+    <script>
+        $(document).ready( ()=> {
+            
+            // Make the home item appear selected
+            $(".navbaritem:contains('over')").css('background-color', 'var(--primarydarken)')
+        })
+    </script>
+{% endblock %}
+{% block body %}
+    <h1>dit is over</h1>
+{% endblock %}

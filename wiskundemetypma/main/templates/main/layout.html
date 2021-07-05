@@ -16,9 +16,15 @@
     </head>
     <script>
         $(document).ready(function() {
-            $('.navbaritem').click( ()=> {
+
+            var screeny =  $(document).height();
+            var screenx = $(document).width();
+
+            $('#page').css('height', (screeny - 380).toString() + 'px');
+
+            $('.navbaritem').click( function(event) {
                 var link = $(this).html();
-                window.location.href = '{% url "'link'" %}'
+                window.location.href = "{% url 'blog' %}".replace(/blog/, link.toString());
             });
         });
     </script>
@@ -38,6 +44,41 @@
             --success: #2e7d32;
             --whitetext: white;
             --blacktext: black;
+
+            /* Shadow 1dp */
+            --box-shadow1dp: 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12), 0 1px 3px 0 rgba(0,0,0,0.20);
+
+            /* Shadow 2dp */
+            --box-shadow2dp: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.20);
+
+            /* Shadow 3dp */
+            --box-shadow3dp: 0 3px 4px 0 rgba(0,0,0,0.14), 0 3px 3px -2px rgba(0,0,0,0.12), 0 1px 8px 0 rgba(0,0,0,0.20);
+
+            /* Shadow 4dp */
+            --box-shadow4dp: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.20);
+
+            /* Shadow 6dp */
+            --box-shadow6dp: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.20);
+
+            /* Shadow 8dp */
+            --box-shadow8dp: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.20);
+
+            /* Shadow 9dp */
+            --box-shadow9dp: 0 9px 12px 1px rgba(0,0,0,0.14), 0 3px 16px 2px rgba(0,0,0,0.12), 0 5px 6px -3px rgba(0,0,0,0.20);
+
+            /* Shadow 12dp */
+            --box-shadow12dp: 0 12px 17px 2px rgba(0,0,0,0.14), 0 5px 22px 4px rgba(0,0,0,0.12), 0 7px 8px -4px rgba(0,0,0,0.20);
+
+            /* Shadow 16dp */
+            --box-shadow16dp: 0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.20);
+
+            /* Shadow 24dp */
+            --box-shadow24dp: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.20);
+        }
+
+        ::selection {
+            background-color: var(--primarydarken);
+            color: var(--whitetext);
         }
 
         div {
@@ -57,16 +98,19 @@
         }
 
         #navbar {
-            background-color: var(--dmbg);
-            position: absolute;
+            background-color: var(--dmbgdarken);
+            position: sticky;
             width: 100%;
             height: 80px;
-            top: 300px;
+            top: 0px;
             left: 0px;
+            z-index: 8;
+            overflow: block;
+            box-shadow: var(--box-shadow6dp);
         }
 
         .navbaritem {
-            background-color: var(--dmbg);
+            background-color: var(--dmbgdarken);
             height: 80px;
             float: left;
             padding-left: 16px;
@@ -86,28 +130,55 @@
             height: 300px; 
             width: 100%;
             top: 0px;
-            position: absolute;
+            position: fixed;
+            z-index: -1;
         }
 
-        #background {
-            background-color: var(--bg);
+        #page {
+            z-index: 2;
+            top: 0px;
+            bottom: 240px;
             height: 100%;
             width: 100%;
-            z-index: 10;
+            background-color: var(--dmbg);
+        }
+
+        #content {
+            margin-left: 20%;
+            margin-right: 20%;
+            padding-bottom: 80px;
+            padding-top: 80px;
+        }
+
+        #footer {
+            width: 100%;
+            height: 240px;
+            background-color: var(--dmbglighten);
+            position: relative;
+            bottom: 0px;
         }
     </style>
     <body>
         <div id="backgroundimage"></div>
+        <div style="height: 300px"></div>
         <div id="navbar">
-            <div class="navbaritem" href="{% url 'index' %}">home</div>
-            <div class="navbaritem" href="{% url 'over' %}">over</div>
-            <div class="navbaritem" href="{% url 'blog' %}">blog</div>
-            <div class="navbaritem" href="{% url 'leaderboard' %}">leaderboard</div>
+            <div class="navbaritem" >home</div>
+            <div class="navbaritem" >over</div>
+            <div class="navbaritem" >blog</div>
+            <div class="navbaritem" >leaderboard</div>
             <div class="navbaritem" style="float: right;" href="{% url 'registreren' %}">registreren</div>
             <div class="navbaritem" style="float: right;" href="{% url 'inloggen' %}">inloggen</div>
         </div>
-            {% block body%}
+        <div id="page">
+            <div id="content">
+                {% block body%}
 
-            {% endblock %}
+                {% endblock %}
+            </div>
+        </div>
+        <div id="footer">
+
+
+        </div>
     </body>
 </html>

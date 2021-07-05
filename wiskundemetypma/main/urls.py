@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .  import views
 
 urlpatterns = [
@@ -8,4 +8,5 @@ urlpatterns = [
     path("registreren", views.registreren, name="registreren"),
     path("over", views.over, name="over"),
     path("leaderboard", views.leaderboard, name="leaderboard"),
+    path("home", views.index, name="index"),
 ]
