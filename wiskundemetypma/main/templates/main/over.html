@@ -11,7 +11,60 @@
             $(".navbaritem:contains('over')").css('background-color', 'var(--primarydarken)')
         })
     </script>
+    <style>
+        .overtext {
+            max-width: 600px;
+        }
+        .contacttable {
+            font-family: Roboto Mono;
+            margin: 0px;
+        }
+        .row {
+            height: 40px;
+            min-width: 200%;
+        }
+        .rowitem {
+            min-width: 400px;
+        }
+    </style>
 {% endblock %}
 {% block body %}
-    <h1>dit is over</h1>
+<div class="overtext">
+    <h1>over ons</h1>
+    <p>Hier komt een vreselijk emotioneel verhaal over hoe Mr.Ypma Vincent en Christiaan eerst zou verlaten maar toen terug kwam op precies het juiste moment en nog krachtiger was dan voorheen, net als Gandalf the White.</p>
+    <h1 class="subtitle" style="margin-top: 40px;">Peter Ypma</h1>
+    <p>Peter Ypma, ook wel <span class="italic">de spelende wiskunde leraar</span> of <span class="italic">die blije gozer die wiskunde geeft</span> is, je raadt het, een wiskunde leraar.
+        Spelletjes spelen is zijn favoriete ding, maar daag hem niet uit voor een potje schaken, je zal huilend weglopen namelijk.
+        Ypma zou ons verlaten in 2021 en de hele school was in rep en roer, want hoe moest dat nou verder zonder Ypma?
+        Kregen we Masselink voor wiskunde D? Of zelfs Vonk!?
+        Gelukkig kwam Ypma op het laatste moment met geweldig nieuws, hij zou blijven voor wiskunde D.
+        De hele school was opgelucht en leefde nog lang en gelukkig.
+    </p>
+    <h1 class="subtitle" style="margin-top: 40px;">Vincent Ruijgrok</h1>
+    <p>Vincent staat bekend om zijn vele goede cijfers, hij staat gemiddeld een tien voor oprecht elk vak ofzo. 
+        Hij is ook heer en meester van de back-end maar durft de front-end niet meer aan te raken nadat Christiaan hem meerdere keren heeft uitgelachen.
+        Vincent heeft een PWS over websites bouwen samen met Christiaan. Die kan je <a style="color: var(--secondarylighten);" href="https://groteprogrammeer.nl">hier</a> vinden.
+        Als de link het niet doet heeft het pws gefaald.
+    </p>
+    <h1 class="subtitle" style="margin-top: 40px;">Christiaan van der Haven</h1>
+    <p>Christiaan is de slimste, coolste en knapste front-end developer op de wereld en dit stuk is zeker niet door hem geschreven en is 100% gefact-checkt door vertrouwde bronnen.
+        Christiaan staat bekend om... Geen idee eigenlijk. Hij is gewoon echt heel episch een heeft deze website echt kapot mooi gemaakt.
+    </p>
+    <h1 class="subtitle" style="margin-top: 40px;"> contact</h1>
+    <div class="row" style="margin-top: 24px;">
+        <p class="contacttable rowitem" style="max-width: 100px;">Ypma</p>
+        <p class="contacttable rowitem">Ypma's email adres</p>
+        <p class="contacttable rowitem">haha, die krijg je niet</p>
+    </div>
+    <div class="row">
+        <p class="contacttable rowitem">Vincent</p>
+        <p class="contacttable rowitem">vincentruijgrok@gmail.com</p>
+        <p class="contacttable rowitem">06 12536435</p>
+    </div>
+    <div class="row">
+        <p class="contacttable rowitem" style="width: 100px;">Christiaan</p>
+        <p class="contacttable rowitem">christiaanvanderhaven@hotmail.com</p>
+        <p class="contacttable rowitem">mij niet bellen</p>
+    </div>
+</div>
 {% endblock %}

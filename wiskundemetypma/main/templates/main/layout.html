@@ -16,25 +16,54 @@
     </head>
     <script>
         $(document).ready(function() {
+
+            $(document).scroll( ()=> {
+                $('#backgroundimage').css('top', $(document).scrollTop() * -0.3);
+            });
             
+
             var screeny =  $(document).height();
             var screenx = $(document).width();
 
             $('#page').css('height', (screeny - 380).toString() + 'px');
 
             $('.navbaritem').click( function(event) {
-                
-                $('#content').removeClass('contentwelcome');
-                $('#content').addClass('contentbegone');
-                
-                event.preventDefault();
-                
-                window.setTimeout( ()=> {
-                    var link = $(this).html();
-                    window.location.href = "{% url 'blog' %}".replace(/blog/, link.toString());
-                }, 500);
-                
+                if (window.location.pathname.includes($(this).html()) === false) {
+                    $('#content').removeClass('contentwelcome');
+                    $('#content').addClass('contentbegone');
+                    
+                    event.preventDefault();
+                    
+                    window.setTimeout( ()=> {
+                        var link = $(this).html();
+                        window.location.href = "{% url 'blog' %}".replace(/blog/, link.toString());
+                    }, 500);
+                }
             });
+
+            var status = $('#modal').attr('value');
+            
+            if (status.length !== 0) {
+
+                $('#modal').show();
+
+                if (status == 1) {
+                    $('#modal').css('background-color', 'var(--primarydarken)');
+                } else if (status == -1) {
+                    $('#modal').css('background-color', 'var(--error)');
+                } else {
+                    $('#modal').css('background-color', 'var(bg)');
+                }
+
+                $('#modal').click( ()=> {
+                    $('#modal').addClass('erroranimationout');
+                    event.preventDefault();
+                    
+                    window.setTimeout( ()=> {
+                        $('#modal').hide();
+                    }, 500);
+                });
+            };
         });
     </script>
     <style>
@@ -95,6 +124,22 @@
             padding: 0px;
         }
 
+        p {
+            margin-top: 16px;
+            line-height: 24px;
+            color: var(--whitetext);
+        }
+
+        h1 {
+            font-family: Bungee;
+            margin: 0px;
+            padding: 0px;
+            color: var(--whitetext);
+            font-weight: 400;
+            font-size: 40px;
+            line-height: 40px;
+        }
+
         body {
             padding: 0px;
             margin: 0px;
@@ -104,6 +149,26 @@
         html {
             padding: 0px;
             margin: 0px;
+        }
+
+        .subtitle {
+            font-family: Roboto Mono;
+            font-size: 28px;
+            font-weight: 500;
+            line-height: 8px;
+        }
+
+        .italic {
+            font-style: italic;
+        }
+
+        .row {
+            width: 100%
+        }
+
+        .rowitem  {
+            height: 100%;
+            float: left;
         }
 
         #navbar {
@@ -219,6 +284,65 @@
         }
         }
 
+        .erroranimation {
+            -webkit-animation: erroranimation 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+            animation: erroranimation 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        }
+
+        @-webkit-keyframes erroranimation {
+        0% {
+            -webkit-transform: translateY(-1000px);
+                    transform: translateY(-1000px);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateY(0);
+                    transform: translateY(0);
+            opacity: 1;
+        }
+        }
+        @keyframes erroranimation {
+        0% {
+            -webkit-transform: translateY(-1000px);
+                    transform: translateY(-1000px);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateY(0);
+                    transform: translateY(0);
+            opacity: 1;
+        }
+        }
+
+        .erroranimationout {
+            -webkit-animation: erroranimationout 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+	        animation: erroranimationout 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+        }
+        @-webkit-keyframes erroranimationout {
+        0% {
+            -webkit-transform: translateY(0);
+                    transform: translateY(0);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateY(-1000px);
+                    transform: translateY(-1000px);
+            opacity: 0;
+        }
+        }
+        @keyframes erroranimationout {
+        0% {
+            -webkit-transform: translateY(0);
+                    transform: translateY(0);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateY(-1000px);
+                    transform: translateY(-1000px);
+            opacity: 0;
+        }
+        }
+
 
 
         #footer {
@@ -249,6 +373,25 @@
             width: 100%;
             height: 80px;
         }
+
+        #modal {
+            background-color: var(--primarydarken);
+            color: var(--whitetext);
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            padding: 8px;
+            display: none;
+            box-shadow: var(--box-shadow16dp);
+            z-index: 10;
+        }
+
+        .error {
+            font-family: Roboto Mono;
+            color: var(--whitetext);
+            margin: 4px;
+            font-weight: 500;
+        }
     </style>
     <body>
         <div id="backgroundimage"></div>
@@ -258,11 +401,14 @@
             <div class="navbaritem" >over</div>
             <div class="navbaritem" >blog</div>
             <div class="navbaritem" >leaderboard</div>
-            <div class="navbaritem" style="float: right;" href="{% url 'registreren' %}">registreren</div>
-            <div class="navbaritem" style="float: right;" href="{% url 'inloggen' %}">inloggen</div>
+            <div class="navbaritem" style="float: right;">registreren</div>
+            <div class="navbaritem" style="float: right;">inloggen</div>
+            {% if user.is_authenticated %}
+            <div class="navbaritem" style="float: right;">uitloggen</div>
+            {% endif %}
         </div>
         <div id="page">
-            <div id="content" class="contentbegone contentwelcome">
+            <div id="content" value="{{ animate }}" class="contentbegone contentwelcome">
                 {% block body%}
 
                 {% endblock %}
@@ -271,6 +417,10 @@
         <div id="footer">
 
 
+        </div>
+        <div id="modal" value="{{ status }}" class="erroranimation">
+            <p class="error">{{ message }}</p>
+            <p class="error">klik om te bevestigen</p>
         </div>
     </body>
 </html>

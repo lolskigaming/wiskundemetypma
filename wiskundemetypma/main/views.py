@@ -1,5 +1,6 @@
 from .models import myUserCreationForm
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, HttpResponseRedirect
@@ -21,10 +22,16 @@ def inloggen(request):
             login(request, user)
             next = request.POST.get('next')
             if next:
-                HttpResponseRedirect(next)
-            return HttpResponseRedirect("/blog") # BLOG IS TIJDELIJKKKKK!!!!!!!!!!
+                HttpResponseRedirect(next) # Ik heb dit van vincent gekopieerd, geen idee wat het doet, heb ook geen zin om naar te kijken
+            return render(request, "main/blog.html", {
+            "message": "we hebben je ingelogd!",
+            "status": 1
+        }) # BLOG IS TIJDELIJKKKKK!!!!!!!!!!
         else:
-            return render(request, "main/inloggen.html") # ERROR MESSAGE MOET ER NOG BIJJJJ!!!!!
+            return render(request, "main/inloggen.html",{
+                "message": "het wachtwoord en/of de gebruikernsaam klopt niet, probeer het opnieuw",
+                "status": -1
+            })
     else:
         return render(request, "main/inloggen.html")
 
@@ -33,10 +40,30 @@ def registreren(request):
         form = myUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            return render(request, 'main/blog.html') # Error and succession yet to come
+            return render(request, 'main/blog.html',{
+                "message": "je bent nu geregistreerd!",
+                "status": 1
+            })
+        else:
+            return render(request, 'main/registreren.html', {
+                'form':form,
+                "animate": 'False',
+                "message": "er is iets mis gegaan met het registreren, probeer het opnieuw.",
+                "status": -1
+            })
     else:
         form = myUserCreationForm()
-    return render(request, 'main/registreren.html', {'form':form})
+    return render(request, 'main/registreren.html', {
+        "animate": 'True',
+        'form': form
+    })
+
+def uitloggen(request):
+    logout(request)
+    return render(request, 'main/index.html', {
+        "message": "je bent uitgelogd!",
+        "status": 1
+    })
 
 def over(request):
     return render(request, "main/over.html")
