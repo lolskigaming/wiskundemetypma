@@ -39,11 +39,10 @@ class Opgave(models.Model):
     opgave = RichTextField()
     plaatje = models.ImageField(blank=True, null=True, upload_to='images/')
     vaardigheid = models.ForeignKey(Vaardigheid, on_delete=models.PROTECT)
-    antwoord = models.CharField(max_length=255)
     uitwerking = RichTextField()
 
     def __str__(self):
-        return "Opgave bij " + self.vaardigheid.naam + ": " + self.opgave
+        return "Opgave bij " + self.vaardigheid.naam + " - " + str(self.pk)
     
     class Meta:
         ordering = ['vaardigheid', 'pk']

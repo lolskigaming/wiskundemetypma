@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'oefenen',
-    'ckeditor'
+    'ckeditor',
+    'mathfilters'
 ]
 
 MIDDLEWARE = [

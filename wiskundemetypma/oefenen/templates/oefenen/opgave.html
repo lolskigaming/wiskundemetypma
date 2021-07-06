@@ -9,6 +9,15 @@
         .nakijken {
             display: none;
         }
+        p {
+            margin-top:0px;
+            margin-bottom:0px;
+            padding:0px;
+        }
+        #afbeelding {
+            width:300px;
+            height:300px;
+        }
     </style>
     <script>
         function nakijken() {
@@ -25,11 +34,10 @@
     <div id="opgave">{{ o.opdracht|safe }}</div>
 
     {% if opdracht.plaatje %}
-    <div id="plaatje"><img src="{{ opdracht.plaatje.url }}"></div>
+    <div id="plaatje"><img id="afbeelding" src="{{ opdracht.plaatje.url }}"></div>
     {% endif %}
     
-    <pre><div class="nakijken" id="antwoord">{{ o.antwoord }}</div></pre>
-    <pre><div class="nakijken" id="uitwerking">{{ o.uitwerking }}</div></pre>
+    <div class="nakijken" id="uitwerking">{{ o.uitwerking|safe }}</div>
     <button id="nakijken" onclick="nakijken()">Nakijken</button>
 
 

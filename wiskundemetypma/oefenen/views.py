@@ -79,7 +79,7 @@ def oefenen(request, letter, pk):
     x = randint(0, len(opdrachten)-1) 
 
     # Sla de opdracht op in JSON vorm
-    opdracht = {"opdracht":opdrachten[x].opgave,"antwoord":opdrachten[x].antwoord,"uitwerking":opdrachten[x].uitwerking}
+    opdracht = {"opdracht":opdrachten[x].opgave,"uitwerking":opdrachten[x].uitwerking}
 
     # Render de template en stuur de data door
     return render(request, "oefenen/opgave.html", {
@@ -154,4 +154,29 @@ def uitleg(request, letter, pk):
 
     return render(request, "oefenen/uitleg.html", {
         'uitleg':uitleg,
+        'letter':letter,
+        'pk':pk
+    })
+
+@login_required
+def overzicht(request, letter):
+    o = Onderwerp.objects.get(letter=letter.capitalize())
+    v = Vaardigheid.objects.filter(bijbehorend_onderwerp=o)
+    user = User.objects.get(id=request.user.id)
+    vaardigheid = list()
+    for each in v:
+        try:
+            voortg = Voortgang.objects.get(vaardigheid=each, user=user)
+            if voortg.voortgang < 0:
+                vaardigheid.append((each, 0))
+                continue
+            if voortg.voortgang > 1:
+                vaardigheid.append((each, 1))
+                continue
+            vaardigheid.append((each, int(voortg.voortgang)))
+        except:
+            vaardigheid.append((each, 0))
+
+    return render(request, "oefenen/overzicht.html", {
+        "v":vaardigheid
     })

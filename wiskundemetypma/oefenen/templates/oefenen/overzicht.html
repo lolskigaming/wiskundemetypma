@@ -1,0 +1,21 @@
+{% load mathfilters %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Overzicht</title>
+</head>
+<body>
+    <h1>Overzicht bij het onderwerp {{ v.0.bijbehorend_onderwerp.naam }}</h1>
+    <ul>
+        {% for each in v %}
+        <li>
+            <a href="/oefenen/uitleg/{{ each.0.bijbehorend_onderwerp.letter }}/{{ each.0.nummer }}">{{ each.0.naam }}</a>
+            {{ each.1|mul:100 }}%
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

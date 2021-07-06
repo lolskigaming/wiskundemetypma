@@ -8,16 +8,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Uitleg</title>
     <script src="{% static 'ckeditor/ckeditor/plugins/ckeditor_wiris/plugin.js' %}"></script>
-
     <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </head>
 <body>
     <h1>Uitleg voor de vaardigheid {{ uitleg.vaardigheid.naam }}</h1>
-    <p><math xmlns="http://www.w3.org/1998/Math/MathML"><mfrac><mn>1</mn><mn>2</mn></mfrac></math></p>
     <h2>Theorie</h2>
     <div id="theorie">{{ uitleg.uitleg|safe }}</div>
     
     <h2>Voorbeeld</h2>
     <div id="voorbeeld">{{ uitleg.voorbeeld|safe }}</div>
+
+    <div style="text-align: center;">Klik <a href="/oefenen/{{ letter }}/{{ pk }}">hier</a> om te oefenen met deze vaardigheid.</div>
 </body>
 </html>
