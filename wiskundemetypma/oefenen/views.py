@@ -1,6 +1,6 @@
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from .models import OpdrachtVoortgang, Vaardigheid, Onderwerp, Opgave, Voortgang, Gebruiker
+from .models import OpdrachtVoortgang, Vaardigheid, Onderwerp, Opgave, Voortgang, Gebruiker, Uitleg
 from random import randint
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -142,3 +142,16 @@ def volgende(request):
     return render(request, "oefenen/volgende.html", {
             "score":"huh"
         })
+
+@login_required
+def uitleg(request, letter, pk):
+    uid = request.user.id
+    user = User.objects.get(id=uid)
+    o = Onderwerp.objects.get(letter=letter.capitalize())
+    v = Vaardigheid.objects.get(bijbehorend_onderwerp=o, nummer=pk)
+
+    uitleg = Uitleg.objects.get(vaardigheid=v)
+
+    return render(request, "oefenen/uitleg.html", {
+        'uitleg':uitleg,
+    })

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import PROTECT
 from ckeditor.fields import RichTextField
+from django.contrib import admin
 
 # Create your models here.
 
@@ -67,3 +68,13 @@ class OpdrachtVoortgang(models.Model):
 
     def __str__(self):
         return str(self.user) + " heeft de opdracht \"" + self.opdracht.opgave + "\" " + str(self.hoevaak_gedaan) + " keer gedaan"
+
+class Uitleg(models.Model):
+    vaardigheid = models.OneToOneField(Vaardigheid, on_delete=models.PROTECT)
+    uitleg = RichTextField()
+    voorbeeld = RichTextField(null=True, blank=True)
+
+    def __str__(self):
+        return "Uitleg voor " + self.vaardigheid.naam
+
+
