@@ -138,8 +138,10 @@ CKEDITOR_CONFIGS = {
         'toolbar': 'full',
         'extraPlugins': ','.join(
             [
-               'wiris',
+               'ckeditor_wiris',
             ]
         ),
     },
 }
+
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"

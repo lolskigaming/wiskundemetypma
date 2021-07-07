@@ -1,0 +1,172 @@
+{% extends "main/layout.html" %}
+
+{% block head %}
+<script>
+    $(document).ready( ()=> {
+        
+        $('#content').addClass('contentwelcome');
+
+        var vlijst = JSON.parse($('#onderwerplijst').attr('value'));
+        console.log(vlijst.A.naam)
+        for (o in vlijst) {
+            var gemiddeldevoortgang = 0.0;
+            $('#onderwerplijst').append(`<div id="onderwerp${o}"></div>`);
+            $(`#onderwerp${o}`).append(`<div class="onderwerpheader row"><p class="onderwerptitel rowitem">${o}: ${vlijst[o].naam}</p></div>`);
+            $(`#onderwerp${o}`).append('<div class="vaardigheidlijst" hidden></div>')
+            $(`#onderwerp${o}`).css({'background-color': 'var(--dmbglighten)', 'position': 'relative'});
+            $(`#onderwerp${o}`).addClass('onderwerp');
+            for (v in Object.keys(vlijst[o].vaardigheid)) {
+                var iconcolor = "var(--whitetext)";
+                var backgroundcolor = "var(--dmbglighten)";
+                gemiddeldevoortgang += vlijst[o].vaardigheid[v].voortgang;
+                if (vlijst[o].vaardigheid[v].voortgang >= 1.0) {
+                    iconcolor = "var(--secondary)"
+                    vlijst[o].vaardigheid[v].voortgang = 1.0;
+                }
+
+                if (v % 2 == 0) {
+                    backgroundcolor = "#9b9c9e"
+                }
+                $(`#onderwerp${o} .vaardigheidlijst`).append(`
+                <div class="row" style="background-color: ${backgroundcolor};">
+                    <i class="material-icons rowitem vaardigheidicon" style="color: ${iconcolor};">circle</i>
+                    <a href="${vlijst[o].vaardigheid[v].link}"><p class="vaardigheid rowitem">${vlijst[o].vaardigheid[v].naam}</p></a>
+                    <div class="progressbarbackground"><div class="progressbar" style="width: ${vlijst[o].vaardigheid[v].voortgang * 100}px"></div></div>
+                    <p class="progress">${Math.round(vlijst[o].vaardigheid[v].voortgang * 100)}%</p>
+                </div>
+                `);
+            };
+
+            var percentage = Math.round(gemiddeldevoortgang / Object.keys(vlijst[o].vaardigheid).length * 100);
+            if (isNaN(percentage)){
+                percentage = 0.0
+            };
+
+            $(`#onderwerp${o} .onderwerpheader `).append(`
+                <div class="progressbarbackground"  style="margin-top: 18px; margin-bottom: 18px;">
+                    <div class="progressbar" style="width: ${gemiddeldevoortgang / Object.keys(vlijst[o].vaardigheid).length * 100}px;"></div>
+                </div>
+                <p class="progress" style="line-height: 60px;">${percentage}%</p>
+            `);
+        };
+
+        $('.onderwerpheader').click( function() {
+            var onderwerp = $(this).parent();
+            $(onderwerp).css({height: 'auto'});
+            var height = $(onderwerp).height();
+            $(onderwerp).toggle();
+            $(onderwerp).children('.vaardigheidlijst').toggle();
+            var height2 = $(onderwerp).height();
+            $(onderwerp).css({height: height});
+            $(onderwerp).toggle();
+            $(onderwerp).animate({'height': height2}, 200);
+            $(this).css('box-shadow', 'var(--box-shadow4dp)')
+            
+        });
+        
+    });
+</script>
+<style>
+    .progressbarbackground {
+        width: 100px;
+        background-color: var(--bg);
+        height: 24px;
+        float: right;
+        margin: 8px;
+        right: 0px;
+    }
+
+    .progressbar {
+        width: 0px;
+        height: 100%;
+        background-color: var(--secondarylighten);
+    }
+
+    .progress {
+        line-height: 40px;
+        margin: 0px;
+        float: right;
+        color: var(--blacktext);
+        font-family: Roboto Mono;
+    }
+
+    .row {
+        height:40px;
+    }
+
+    .vaardigheidicon {
+        height: 40px;
+        line-height: 40px;
+        padding-left: 8px;
+        color: var(--whitetext);
+    }
+
+    #onderwerplijst {
+        width: 100%;
+        overflow: visible;
+        box-shadow: var(--box-shadow4dp);
+        
+    }
+    
+    .onderwerptitel {
+        padding-left: 8px;
+        margin: 0px;
+        line-height: 60px;
+        font-size: 20px;
+        max-height: 40px;
+        font-family: Roboto Mono;
+        font-style: oblique;
+        color: var(--blacktext);
+    }
+
+    .onderwerpheader {
+        background-color: var(--primarylighten);
+        position: relative;
+        z-index: 1;
+        height: 60px;
+    }
+
+    .onderwerpheader:hover {
+        box-shadow: var(--box-shadow4dp);
+        z-index: 4;
+    }
+    
+    .onderwerp {
+        width: 100%;
+        height: auto;
+    }
+
+    .vaardigheid {
+        margin: 0px;
+        padding-left: 16px;
+        font-size: 20px;
+        line-height: 40px;
+        font-family: inter;
+        color: var(--blacktext);
+    }
+
+    .vaardigheid:hover {
+        color: var(--secondarydarken);
+    }
+
+    .vaardigheidlijst {
+        background-color: var(--dmbglighten);
+    }
+
+    .onderwerpbigheader {
+        width: 100%; 
+        background-color: var(--primary); 
+        z-index: 3;
+        position: relative;
+        box-shadow: var(--box-shadow4dp);
+    }
+</style>
+
+{% endblock %}
+
+{% block body %}
+<h1>welkom, {{ user }}</h1>
+<p>Dit is jou eigen gebruikers pagina. Je kan hier snel navigeren naar een vaardigheid of een oefentoets maken. Je kan ook de wekelijkse opdracht maken.</p>
+<div class="onderwerpbigheader"><h1 style="padding: 8px;">Vaardigheden:</h1></div>
+<div id="onderwerplijst" value="{{ soortvaardigheid }}"></div>
+{% endblock %}

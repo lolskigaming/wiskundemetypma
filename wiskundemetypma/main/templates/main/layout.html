@@ -9,7 +9,8 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter&family=Roboto+Mono&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Kanit:wght@500&family=Oswald&family=Russo+One&family=Yantramanav:wght@300;700&display=swap" rel="stylesheet">
         {% block head %}
 
         {% endblock %}
@@ -36,7 +37,7 @@
                     
                     window.setTimeout( ()=> {
                         var link = $(this).html();
-                        window.location.href = "{% url 'blog' %}".replace(/blog/, link.toString());
+                        window.location.href = "{% url 'blog' %}".replace(/blog/, link.toString().toLowerCase());
                     }, 500);
                 }
             });
@@ -75,10 +76,10 @@
             --secondarydarken: #0057c9;
             --secondarylighten: #6bb1ff;
             --bg: white;
-            --dmbg: #424242;
-            --dmbgdarken: #1b1b1b;
-            --dmbglighten: #6d6d6d;
-            --error: #d32f2f;
+            --dmbg: #454648;
+            --dmbgdarken: #18191a;
+            --dmbglighten: #babbbd;
+            --error: #d32f2f;   
             --success: #2e7d32;
             --whitetext: white;
             --blacktext: black;
@@ -131,7 +132,7 @@
         }
 
         h1 {
-            font-family: Bungee;
+            font-family: kanit, lucida sans, sans-serif;
             margin: 0px;
             padding: 0px;
             color: var(--whitetext);
@@ -144,6 +145,7 @@
             padding: 0px;
             margin: 0px;
             font-family: 'Inter', sans-serif;
+            background-attachment: fixed;
         }
 
         html {
@@ -190,7 +192,8 @@
             padding-left: 16px;
             padding-right: 16px;
             font-size: 24px;
-            font-weight: bold;
+            font-weight: thin;
+            font-family: yantramanav;
             color: var(--whitetext);
             line-height: 80px;
         }
@@ -348,7 +351,7 @@
         #footer {
             width: 100%;
             height: 240px;
-            background-color: var(--dmbglighten);
+            background-color: var(--dmbgdarken);
             position: relative;
             bottom: 0px;
         }
@@ -360,8 +363,8 @@
             width: 180px;
             background-color: var(--primarydarken);
             color: white;
-            font-size: 16px;
-            font-family: Roboto Mono;
+            font-size: 20px;
+            font-family: yantramanav;
             font-weight: 500;
         }
 
@@ -379,7 +382,6 @@
             color: var(--whitetext);
             position: fixed;
             top: 0px;
-            left: 0px;
             padding: 8px;
             display: none;
             box-shadow: var(--box-shadow16dp);
@@ -397,14 +399,17 @@
         <div id="backgroundimage"></div>
         <div style="height: 300px"></div>
         <div id="navbar">
-            <div class="navbaritem" >home</div>
-            <div class="navbaritem" >over</div>
-            <div class="navbaritem" >blog</div>
-            <div class="navbaritem" >leaderboard</div>
-            <div class="navbaritem" style="float: right;">registreren</div>
-            <div class="navbaritem" style="float: right;">inloggen</div>
-            {% if user.is_authenticated %}
-            <div class="navbaritem" style="float: right;">uitloggen</div>
+            <div class="navbaritem" >HOME</div>
+            <div class="navbaritem" >OVER</div>
+            <div class="navbaritem" >BLOG</div>
+            {% if request.user.is_authenticated %}
+            <div class="navbaritem" >GEBRUIKER</div>
+            <div class="navbaritem" >LEADERBOARD</div>
+            {% endif %}
+            <div class="navbaritem" style="float: right;">REGISTREREN</div>
+            <div class="navbaritem" style="float: right;">INLOGGEN</div>
+            {% if request.user.is_authenticated %}
+            <div class="navbaritem" style="float: right;">UITLOGGEN</div>
             {% endif %}
         </div>
         <div id="page">
@@ -418,9 +423,11 @@
 
 
         </div>
+        {% if message and status %}
         <div id="modal" value="{{ status }}" class="erroranimation">
             <p class="error">{{ message }}</p>
             <p class="error">klik om te bevestigen</p>
         </div>
+        {% endif %}
     </body>
 </html>
