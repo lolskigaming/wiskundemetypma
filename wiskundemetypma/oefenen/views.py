@@ -137,7 +137,7 @@ def volgende(request):
         if nieuwe_voortgang >= 1:
             # Stuur hem door naar het keuzemenu voor de volgende vaardigheid
             aantalvaardigheden = len(Voortgang.objects.filter(user=user, voortgang__gte=0.9))
-            totaal = len(Vaardigheid.objects.all())
+            totaal = len(Vaardigheid.objects.all())-1 # (null vaardigheid telt niet mee)
             score = aantalvaardigheden / totaal * 100
             print(f'score = {aantalvaardigheden} / {totaal} = {score}')
             
