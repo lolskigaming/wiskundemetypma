@@ -134,7 +134,7 @@ def volgende(request):
         vo.save()
 
         # Als de gebruiker de vaardigheid beheerst
-        if nieuwe_voortgang >= 1:
+        if nieuwe_voortgang >= 0.995:
             # Stuur hem door naar het keuzemenu voor de volgende vaardigheid
             aantalvaardigheden = len(Voortgang.objects.filter(user=user, voortgang__gte=0.9))
             totaal = len(Vaardigheid.objects.all())-1 # (null vaardigheid telt niet mee)
@@ -201,7 +201,7 @@ def overzicht(request, letter):
             if voortg.voortgang < 0:
                 vaardigheid.append((each, 0))
                 continue
-            if voortg.voortgang > 1:
+            if voortg.voortgang >= 0.995:
                 vaardigheid.append((each, 1))
                 continue
             vaardigheid.append((each, voortg.voortgang))
