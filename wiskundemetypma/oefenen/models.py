@@ -35,10 +35,15 @@ class Vaardigheid(models.Model):
     class Meta:
         ordering = ['bijbehorend_onderwerp', 'nummer']
 
+# Dit slaat een opdracht op, zoals "Los op. 3x = 6", met een
 class Opgave(models.Model):
+    # opgave
     opgave = RichTextField()
+    # evt. een plaatje
     plaatje = models.ImageField(blank=True, null=True, upload_to='images/')
+    # link naar de vaardigheid waar hij bij hoort
     vaardigheid = models.ForeignKey(Vaardigheid, on_delete=models.PROTECT)
+    # uitwerking
     uitwerking = RichTextField()
 
     def __str__(self):
@@ -47,11 +52,13 @@ class Opgave(models.Model):
     class Meta:
         ordering = ['vaardigheid', 'pk']
 
+# Dit slaat bij een gebruiker de overall score en intensiteit op 
 class Gebruiker(models.Model):
     user = models.OneToOneField(User, on_delete=models.PROTECT)
     score = models.FloatField(default=0)
     intensiteit = models.IntegerField(default=3)
 
+# Dit slaat per vaardigheid per gebruiker de voortgang op (tussen -1 en 1,5)
 class Voortgang(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     vaardigheid = models.ForeignKey(Vaardigheid, on_delete=models.PROTECT)
@@ -75,5 +82,9 @@ class Uitleg(models.Model):
 
     def __str__(self):
         return "Uitleg voor " + self.vaardigheid.naam
+
+class Tijdsfactor(models.Model):
+    laatste_keer = models.DateField()
+    intensiteit = models.IntegerField(default=100)
 
 
