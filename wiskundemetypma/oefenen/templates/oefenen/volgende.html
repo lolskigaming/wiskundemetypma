@@ -7,12 +7,13 @@
     <title>Volgende</title>
 </head>
 <body>
+    <!-- Maak een lijst met alle volgende vaardigheden -->
     <h1>Goed gedaan, je kan verder naar de volgende vaardigheid!</h1>
     {{ score }}
     <ul>
     {% for each in v %}
     <li>
-        <a href="/oefenen/{{ each.bijbehorend_onderwerp.letter }}/{{ each.nummer }}">{{ each.naam }}</a>
+        <a href="/oefenen/uitleg/{{ each.bijbehorend_onderwerp.letter }}/{{ each.nummer }}">{{ each.naam }}</a>
     </li>
     {% endfor %}
     </ul>

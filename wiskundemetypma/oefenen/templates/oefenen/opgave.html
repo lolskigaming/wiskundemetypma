@@ -9,6 +9,15 @@
         .nakijken {
             display: none;
         }
+        p {
+            margin-top:0px;
+            margin-bottom:0px;
+            padding:0px;
+        }
+        #afbeelding {
+            width:300px;
+            height:300px;
+        }
     </style>
     <script>
         function nakijken() {
@@ -18,21 +27,34 @@
             }
             document.getElementById("nakijken").style.display = "none";
         }
+        function uitleg_opvragen() {
+            var u = document.getElementById("uitleg");
+            var b = document.getElementById("uitlegbtn");
+            if (u.style.display === "none") {
+                u.style.display = "block";
+                b.innerHTML = "Klik hier om de uitleg te verbergen";
+            }
+            else {
+                u.style.display = "none"
+                b.innerHTML = "Klik hier om de uitleg te bekijken";          
+            }
+        }
     </script>
 </head>
 <body>
+    <!-- Print de opdracht en evt. het plaatje erbij -->
     <h1>Opgave bij {{ opdracht.vaardigheid.naam }}</h1><br>
     <div id="opgave">{{ o.opdracht|safe }}</div>
 
     {% if opdracht.plaatje %}
-    <div id="plaatje"><img src="{{ opdracht.plaatje.url }}"></div>
+    <div id="plaatje"><img id="afbeelding" src="{{ opdracht.plaatje.url }}"></div>
     {% endif %}
     
-    <pre><div class="nakijken" id="antwoord">{{ o.antwoord }}</div></pre>
-    <pre><div class="nakijken" id="uitwerking">{{ o.uitwerking }}</div></pre>
+    <!-- De knop nakijken definiëren -->
+    <div class="nakijken" id="uitwerking">{{ o.uitwerking|safe }}</div>
     <button id="nakijken" onclick="nakijken()">Nakijken</button>
 
-
+    <!-- Als je gaat nakijken, laat deze form zien-->
     <div class="nakijken">
         <form method="post" id=score action="{% url 'volgende' %}">
             {% csrf_token %}
@@ -42,9 +64,9 @@
 
                 <input type="radio" id="goed" name="score" value="1">
                     <label for="goed">Goed</label><br>
-                <input type="radio" id="bijna_goed" name="score" value="0.5">
+                <input type="radio" id="bijna_goed" name="score" value="0.7">
                     <label for="bijna_goed">Goed, op een rekenfout na</label><br>
-                <input type="radio" id="half_goed" name="score" value="0">
+                <input type="radio" id="half_goed" name="score" value="0.25">
                     <label for="half_goed">Voor de helft goed</label><br>
                 <input type="radio" id="fout" name="score" value="-1">
                     <label for="fout">Fout</label><br>
@@ -53,5 +75,21 @@
     </div>
     <input type="hidden" id="letter" name="letter" value="{{ letter }}">
     <input type="hidden" id="pk" name="pk" value="{{ pk }}">
+
+    <!-- is er een uitleg voor deze vaardigheid? maak een knop zodat je 'm kan zien'-->
+    {% if u %}
+    <button id="uitlegbtn" onclick="uitleg_opvragen()">Klik hier om de uitleg te bekijken</button>
+    <div id="uitleg" style="display: none;">
+        <h2>Uitleg</h2>
+        <div id="theorie">
+            <h3>Theorie</h3>
+            {{ u.uitleg|safe }}
+        </div>
+        <div id="voorbeeld">
+            <h3>Voorbeeld</h3>
+            {{ u.voorbeeld|safe }}
+        </div>
+    </div>
+    {% endif %}
 </body>
 </html>

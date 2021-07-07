@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'oefenen',
-    'ckeditor'
+    'ckeditor',
+    'mathfilters'
 ]
 
 MIDDLEWARE = [
@@ -136,12 +137,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
-        'extraPlugins': ','.join(
-            [
-               'ckeditor_wiris',
-            ]
-        ),
-    },
+        'extra_plugins':['ckeditor_wiris'],
+        
+        'external_plugin_resources':[(
+            'someplugin',
+            '/static/ckeditor/ckeditor/plugins/ckeditor_wiris',
+            'plugin.js',
+        )],
+
+    'allowedContent':True,
+    }
 }
 
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+
+
