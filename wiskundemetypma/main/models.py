@@ -6,10 +6,10 @@ from django import forms
 # Create your models here.
 
 class myUserCreationForm(forms.Form):
-    username = forms.CharField(label='gebruikersnaam', min_length=4, max_length=64)
-    id = forms.CharField(label='leerlingnummer', min_length=6, max_length=6) # MISSCHIEN DOEN WE DIT IDK MOET MET YPMA OVERLEGD WORDEN
-    password1 = forms.CharField(label='wachtwoord', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='wachtwoord opnieuw', widget=forms.PasswordInput)
+    username = forms.CharField(label='Gebruikersnaam', min_length=4, max_length=64)
+    id = forms.CharField(label='Leerlingnummer', min_length=6, max_length=6) # MISSCHIEN DOEN WE DIT IDK MOET MET YPMA OVERLEGD WORDEN
+    password1 = forms.CharField(label='Wachtwoord', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='Wachtwoord opnieuw', widget=forms.PasswordInput)
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()

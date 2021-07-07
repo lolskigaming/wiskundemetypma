@@ -32,6 +32,7 @@
         input[required]:focus {
             outline: none !important;
             box-shadow: var(--box-shadow4dp);
+            color: var(--blacktext);
         }
 
         label {
@@ -51,14 +52,14 @@
             <input type="hidden" name="next" value="{{ request.GET.next }}">
             {% endif %}
             <div class="inputwrapper">
-                <label>gebruikersnaam:</label><br>
+                <label>Gebruikersnaam:</label><br>
                 <input type="text" name="username" autofocus required><br>
             </div>
             <div class="inputwrapper">
-                <label>wachtwoord:</label><br>
+                <label>Wachtwoord:</label><br>
                 <input type="password" name="password" required><br>
             </div>
-            <button type="submit" value="login" class="submitbutton">login</button>
+            <button type="submit" value="login" class="submitbutton">LOGIN</button>
         </form>
     </div>
 {% endblock %}
