@@ -20,12 +20,12 @@
                 var backgroundcolor = "var(--dmbglighten)";
                 gemiddeldevoortgang += vlijst[o].vaardigheid[v].voortgang;
                 if (vlijst[o].vaardigheid[v].voortgang >= 1.0) {
-                    iconcolor = "var(--secondary)"
+                    iconcolor = "var(--secondarylighten)"
                     vlijst[o].vaardigheid[v].voortgang = 1.0;
                 }
 
                 if (v % 2 == 0) {
-                    backgroundcolor = "#9b9c9e"
+                    backgroundcolor = "#cacbcd"
                 }
                 $(`#onderwerp${o} .vaardigheidlijst`).append(`
                 <div class="row" style="background-color: ${backgroundcolor};">
@@ -44,9 +44,9 @@
 
             $(`#onderwerp${o} .onderwerpheader `).append(`
                 <div class="progressbarbackground"  style="margin-top: 18px; margin-bottom: 18px;">
-                    <div class="progressbar" style="width: ${gemiddeldevoortgang / Object.keys(vlijst[o].vaardigheid).length * 100}px;"></div>
+                    <div class="progressbar"  style="background-color: var(--primarylighten);width: ${gemiddeldevoortgang / Object.keys(vlijst[o].vaardigheid).length * 100}px;"></div>
                 </div>
-                <p class="progress" style="line-height: 60px;">${percentage}%</p>
+                <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
             `);
         };
 
@@ -116,11 +116,12 @@
         max-height: 40px;
         font-family: Roboto Mono;
         font-style: oblique;
-        color: var(--blacktext);
+        color: var(--whitetext);
+        font-weight: bold;
     }
 
     .onderwerpheader {
-        background-color: var(--primarylighten);
+        background-color: var(--primary);
         position: relative;
         z-index: 1;
         height: 60px;
@@ -142,11 +143,12 @@
         font-size: 20px;
         line-height: 40px;
         font-family: inter;
-        color: var(--blacktext);
+        color: rgba(0,0,0,0.85);
     }
 
     .vaardigheid:hover {
-        color: var(--secondarydarken);
+        text-decoration: underline;
+        color: rgba(0,0,0,1)
     }
 
     .vaardigheidlijst {
@@ -155,7 +157,7 @@
 
     .onderwerpbigheader {
         width: 100%; 
-        background-color: var(--primary); 
+        background-color: var(--primarydarken); 
         z-index: 3;
         position: relative;
         box-shadow: var(--box-shadow4dp);

@@ -40,6 +40,7 @@ def oefenen(request, letter, pk):
     user = User.objects.get(id=uid)
     o = Onderwerp.objects.get(letter=letter.capitalize())
     v = Vaardigheid.objects.get(bijbehorend_onderwerp=o, nummer=pk)
+    voortgang = Voortgang.objects.get(vaardigheid=v, user=user)
 
     # Als deze pagina wordt geladen, checken we ook gelijk de tijdsfactor
     tijdsfactor()
@@ -96,7 +97,8 @@ def oefenen(request, letter, pk):
         'o':opdracht,
         'letter':letter,
         'pk':pk,
-        'u':u
+        'u':u,
+        'voortgang': voortgang.voortgang,
     })
 
 # Bepaal de volgende opdracht
