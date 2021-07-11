@@ -244,7 +244,7 @@
             width: 100%;
             position: relative;
             height: 40px;
-            top: 10px;
+            top: 4px;
         }
         #submitbutton {
             display: inline-block;
@@ -335,6 +335,21 @@
             color: var(--blacktext);
             font-family: Roboto Mono;
         }
+        .subheader {
+            font-family: Roboto Mono;
+            font-size: 24px;
+            padding: 8px 0 0 16px;
+            color: rgb(0,0,0,0.8);
+            margin: 0px;
+        }
+
+        .opgavetext > p {
+            margin: 8px 0 8px 0;
+        }
+
+        #opgavetext > p {
+            margin: 16px 0 16px 0;
+        }
     </style>
 </head>
 <body>
@@ -348,9 +363,9 @@
     
     <div id="opgave" value="{{ voortgang }}">
         <div class="opgaveribbon">LOS OP:</div>
-        <div class="opgavetext">{{ o.opdracht|safe }}
+        <div class="opgavetext" id="opgavetext">{{ o.opdracht|safe }}
             {% if opdracht.plaatje %}
-            <div id="plaatje"><img id="afbeelding" src="{{ opdracht.plaatje.url }}"></div>
+            <div id="plaatje"><img src="{{ opdracht.plaatje.url }}"></div>
             {% endif %}
         </div>
 
@@ -373,7 +388,12 @@
             </form>
         </div>
         <div class="opgaveribbon">UITLEG</div>
-        <div id="uitleg"><div class="opgavetext">{{ u.uitleg|safe }}</div></div>
+        <div id="uitleg">
+            <p class="subheader">Theorie:</p>
+            <div class="opgavetext">{{ u.uitleg|safe }}</div>
+            <p class="subheader">Voorbeeld:</p>
+            <div class="opgavetext">{{ u.voorbeeld|safe }}</div>
+        </div>
     </div>
 </body>
 </html>

@@ -51,8 +51,9 @@ def registreren(request):
                 login(request, user)
                 gebruiker = Gebruiker(user=User.objects.get(id=request.user.id))
                 gebruiker.save()
+                print(gebruiker)
                 return render(request, 'main/gebruiker.html',{
-                    "message": "je bent nu geregistreerd! en ingelogdsds",
+                    "message": "je bent nu geregistreerd!",
                     "status": 1
                 })
 
