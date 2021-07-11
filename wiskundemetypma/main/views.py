@@ -44,9 +44,22 @@ def registreren(request):
         form = myUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
+            username = request.POST["username"]
+            password = request.POST["password1"]
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                gebruiker = Gebruiker(user=User.objects.get(id=request.user.id))
+                gebruiker.save()
+                return render(request, 'main/gebruiker.html',{
+                    "message": "je bent nu geregistreerd! en ingelogdsds",
+                    "status": 1
+                })
+
+            
             return render(request, 'main/gebruiker.html',{
-                "message": "je bent nu geregistreerd!",
-                "status": 1
+                "message": "Je bent nu geregistreerd! Maar er is wel iets misgegaan met het inloggen, probeer opnieuw in te loggen.",
+                "status": 0
             })
         else:
             return render(request, 'main/registreren.html', {
@@ -83,8 +96,6 @@ def gebruiker(request):
     username = request.user.username
     onderwerp = Onderwerp.objects.all()
     soortvaardigheid = dict()
-    soortonderwerp = dict()
-    voortganglijst = dict()
 
     try:
         message = request.session["message"]
@@ -92,7 +103,8 @@ def gebruiker(request):
         status = request.session["status"]
         request.session["status"] = None
     except:
-        message, status = None
+        message = "An error has occured which we did not handle"
+        status = None
     
     for o in onderwerp:
         

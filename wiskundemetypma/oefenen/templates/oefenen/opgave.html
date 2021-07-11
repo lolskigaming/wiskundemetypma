@@ -67,6 +67,11 @@
                     <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
                 </div>
             `);
+
+            var letter = $('#letter').attr('value');
+            var pk = $('#pk').attr('value');
+
+            $('#backbutton').attr('href', `/oefenen/uitleg/${letter}/${pk}`);
         });
     </script>
     <style>
@@ -117,6 +122,11 @@
             --box-shadow24dp: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.20);
         }
 
+        ::selection {
+            background-color: var(--primarydarken);
+            color: var(--whitetext);
+        }
+
         body {
             margin: 0px;
             padding: 0px;
@@ -142,6 +152,7 @@
         #afbeelding {
             width:300px;
             height:300px;
+            box-shadow: var(--box-shadow2dp);
         }
         #ribbon {
             margin: 0px;
@@ -155,10 +166,6 @@
             box-shadow: var(--box-shadow4dp);
         }
 
-        #ribbontitle:hover {
-            text-decoration: underline;
-        }
-
         #background {
             background-color: var(--dmbg);
             height: 100%;
@@ -168,9 +175,11 @@
         
         #backbutton {
             position: absolute;
+            left: 0px;
+            padding: 0 8px 0 8px;
             margin: 30px;
             height: 40px;
-            width: 132px;
+            max-width: 132px;
             background-color: var(--primarydarken);
             border: solid;
             border-color: var(--whitetext);
@@ -178,6 +187,7 @@
             font-family: yantramanav;
             font-size: 28px;
             color: var(--whitetext);
+            border-radius: 0px;
         }
 
         #backbutton:hover {
@@ -194,8 +204,6 @@
             font-size: 28px;
             color: var(--whitetext);
             margin: 0px;
-            padding-right: 8px;
-            height: 28px;
             float: right;
             line-height: 40px;
         }
@@ -333,14 +341,18 @@
     <!-- Print de opdracht en evt. het plaatje erbij -->
     <div id="background">
     <div id="ribbon">
-        <div id="backbutton"><i class="material-icons-outlined" style="margin:8px;">arrow_back</i><p class="backbuttontext">TERUG</p></div>
-        <h1 id="ribbontitle">{{ opdracht.vaardigheid.naam }}</h1>
+        <a id="backbutton"><i class="material-icons-outlined" style="float: left; margin: 6px 0 8px 0;">arrow_back</i><p class="backbuttontext">TERUG</p></a>
+        <h1>{{ opdracht.vaardigheid.naam }}</h1>
     </div>
     <div style="height: 100px;"></div>
     
     <div id="opgave" value="{{ voortgang }}">
         <div class="opgaveribbon">LOS OP:</div>
-        <div class="opgavetext">{{ o.opdracht|safe }}</div>
+        <div class="opgavetext">{{ o.opdracht|safe }}
+            {% if opdracht.plaatje %}
+            <div id="plaatje"><img id="afbeelding" src="{{ opdracht.plaatje.url }}"></div>
+            {% endif %}
+        </div>
 
         <div class="opgaveribbon">NAKIJKEN</div>
         <div id="nakijken">
@@ -363,10 +375,5 @@
         <div class="opgaveribbon">UITLEG</div>
         <div id="uitleg"><div class="opgavetext">{{ u.uitleg|safe }}</div></div>
     </div>
-
-    {% if opdracht.plaatje %}
-    <div id="plaatje"><img id="afbeelding" src="{{ opdracht.plaatje.url }}"></div>
-    {% endif %}
-    
 </body>
 </html>
