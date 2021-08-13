@@ -215,7 +215,7 @@
             z-index: 2;
             top: 0px;
             bottom: 240px;
-            height: 100%;
+            overflow-y: inherit;
             width: 100%;
             background-color: var(--dmbg);
         }
@@ -405,9 +405,10 @@
             {% if request.user.is_authenticated %}
             <div class="navbaritem" >GEBRUIKER</div>
             <div class="navbaritem" >LEADERBOARD</div>
-            {% endif %}
+            {% else %}
             <div class="navbaritem" style="float: right;">REGISTREREN</div>
             <div class="navbaritem" style="float: right;">INLOGGEN</div>
+            {% endif %}
             {% if request.user.is_authenticated %}
             <div class="navbaritem" style="float: right;">UITLOGGEN</div>
             {% endif %}

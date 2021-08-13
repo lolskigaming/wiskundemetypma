@@ -17,6 +17,9 @@ class Onderwerp(models.Model):
     def __str__(self):
         return self.naam
 
+    class Meta:
+        ordering = ['letter']
+
 # Dit slaat de losse vaardigheden op, zoals "lineaire vergelijkingen oplossen", met een
 class Vaardigheid(models.Model):
     # naam en nummer
@@ -25,9 +28,9 @@ class Vaardigheid(models.Model):
     # bij behorend onderwerp
     bijbehorend_onderwerp = models.ForeignKey(Onderwerp, on_delete=models.PROTECT, blank=True, null=True)
     # lijst met voorkennis van vaardigheden
-    voorkennis = models.ManyToManyField("self", symmetrical=False, related_name="vaardigheid_voorkennis")
+    voorkennis = models.ManyToManyField("self", symmetrical=False, related_name="vaardigheid_voorkennis", blank=True, null=True)
     # lijst met volgende vaardigheden
-    volgende = models.ManyToManyField("self", symmetrical=False, related_name="vaardigheid_volgende")
+    volgende = models.ManyToManyField("self", symmetrical=False, related_name="vaardigheid_volgende", blank=True, null=True)
 
     def __str__(self):
         return self.bijbehorend_onderwerp.letter + ". " + self.naam + "  (" + str(self.nummer) + ")"
