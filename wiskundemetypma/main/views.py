@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, HttpResponseRedirect
-from oefenen.models import OpdrachtVoortgang, Vaardigheid, Onderwerp, Opgave, Voortgang, Gebruiker
+from oefenen.models import OpdrachtVoortgang, Vaardigheid, Onderwerp, Opgave, Voortgang, Gebruiker, Uitleg
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -111,20 +111,28 @@ def gebruiker(request):
         
         if o.letter == 'Z':
             continue
+
         vaardigheid = Vaardigheid.objects.filter(bijbehorend_onderwerp=o)
         lijst = list()
         
         soortvaardigheid[o.letter] = {'vaardigheid' : [], 'naam' : o.naam}
         
         for v in vaardigheid:
+
+            linkbase = "/oefenen/"
+            try:
+                if Uitleg.objects.get(vaardigheid=v):
+                    linkbase = "/oefenen/uitleg/"
+            except ObjectDoesNotExist:
+                pass
+
             lijst.append(v.naam)
             try:
                 voortgang = Voortgang.objects.get(vaardigheid=v, user=user)
-                print(voortgang.voortgang)
-                soortvaardigheid[o.letter]['vaardigheid'].append({"naam": v.naam, "voortgang" : voortgang.voortgang, "link" : "/oefenen/uitleg/" + o.letter + "/" + str(v.nummer)})
+                soortvaardigheid[o.letter]['vaardigheid'].append({"naam": v.naam, "voortgang" : voortgang.voortgang, "link" : linkbase + o.letter + "/" + str(v.nummer)})
+
             except ObjectDoesNotExist:
-                soortvaardigheid[o.letter]['vaardigheid'].append({"naam": v.naam, "voortgang" : 0.0, "link" : "/oefenen/uitleg/" + o.letter + "/" + str(v.nummer)})
-        
+                soortvaardigheid[o.letter]['vaardigheid'].append({"naam": v.naam, "voortgang" : 0.0, "link" : linkbase + o.letter + "/" + str(v.nummer)})   
     
     soortvaardigheid = json.dumps(soortvaardigheid)
     
