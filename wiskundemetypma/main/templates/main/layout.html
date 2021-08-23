@@ -18,6 +18,17 @@
     <script>
         $(document).ready(function() {
 
+            $('.navbaritem').each( function() {
+                // ----------------------------------------------------------------------------------------------------------------
+                // slice(22) IS HARDCODED, ALS WE ANDERE IP HEBBEN MOOEEETTTTT DIT AANGEPAST WORDEN, DIT IS ALLEEN TESTING PURPOSE
+                // ----------------------------------------------------------------------------------------------------------------
+                if ($(this).html().toLowerCase() === window.location.href.slice(22)) {
+                    $(this).css('background', 'var(--primarydarken)')
+                } else {
+                    $(this).css('background', 'var(--dmbgdarken)')
+                }
+            });
+
             $(document).scroll( ()=> {
                 $('#backgroundimage').css('top', $(document).scrollTop() * -0.3);
             });
@@ -196,6 +207,7 @@
             font-family: yantramanav;
             color: var(--whitetext);
             line-height: 80px;
+            cursor: pointer;
         }
 
         .navbaritem:hover {
