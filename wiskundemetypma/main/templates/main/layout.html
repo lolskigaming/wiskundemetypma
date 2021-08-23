@@ -69,12 +69,12 @@
     </script>
     <style>
         :root {
-            --primary: #1dd694;
-            --primarydarken: #00a366;
-            --primarylighten: #69ffc5;
-            --secondary: #0e82fd;
-            --secondarydarken: #0057c9;
-            --secondarylighten: #6bb1ff;
+            --primary: rgb(33,245,164);
+            --primarydarken: rgb(37,183,138);
+            --primarylighten: rgb(151,255,203);
+            --secondary: rgb(37,204,237);
+            --secondarydarken: rgb(37,172,237);
+            --secondarylighten: rgb(151,252,255);
             --bg: white;
             --dmbg: #454648;
             --dmbgdarken: #18191a;
@@ -215,7 +215,7 @@
             z-index: 2;
             top: 0px;
             bottom: 240px;
-            height: 100%;
+            overflow-y: inherit;
             width: 100%;
             background-color: var(--dmbg);
         }
@@ -405,9 +405,10 @@
             {% if request.user.is_authenticated %}
             <div class="navbaritem" >GEBRUIKER</div>
             <div class="navbaritem" >LEADERBOARD</div>
-            {% endif %}
+            {% else %}
             <div class="navbaritem" style="float: right;">REGISTREREN</div>
             <div class="navbaritem" style="float: right;">INLOGGEN</div>
+            {% endif %}
             {% if request.user.is_authenticated %}
             <div class="navbaritem" style="float: right;">UITLOGGEN</div>
             {% endif %}

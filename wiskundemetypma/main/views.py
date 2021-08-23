@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse, HttpResponseRedirect
-from oefenen.models import OpdrachtVoortgang, Vaardigheid, Onderwerp, Opgave, Voortgang, Gebruiker
+from oefenen.models import OpdrachtVoortgang, Vaardigheid, Onderwerp, Opgave, Voortgang, Gebruiker, Uitleg
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -44,9 +44,23 @@ def registreren(request):
         form = myUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
+            username = request.POST["username"]
+            password = request.POST["password1"]
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                gebruiker = Gebruiker(user=User.objects.get(id=request.user.id))
+                gebruiker.save()
+                print(gebruiker)
+                return render(request, 'main/gebruiker.html',{
+                    "message": "je bent nu geregistreerd!",
+                    "status": 1
+                })
+
+            
             return render(request, 'main/gebruiker.html',{
-                "message": "je bent nu geregistreerd!",
-                "status": 1
+                "message": "Je bent nu geregistreerd! Maar er is wel iets misgegaan met het inloggen, probeer opnieuw in te loggen.",
+                "status": 0
             })
         else:
             return render(request, 'main/registreren.html', {
@@ -83,8 +97,6 @@ def gebruiker(request):
     username = request.user.username
     onderwerp = Onderwerp.objects.all()
     soortvaardigheid = dict()
-    soortonderwerp = dict()
-    voortganglijst = dict()
 
     try:
         message = request.session["message"]
@@ -92,26 +104,35 @@ def gebruiker(request):
         status = request.session["status"]
         request.session["status"] = None
     except:
-        message, status = None
+        message = "An error has occured which we did not handle"
+        status = None
     
     for o in onderwerp:
         
         if o.letter == 'Z':
             continue
+
         vaardigheid = Vaardigheid.objects.filter(bijbehorend_onderwerp=o)
         lijst = list()
         
         soortvaardigheid[o.letter] = {'vaardigheid' : [], 'naam' : o.naam}
         
         for v in vaardigheid:
+
+            linkbase = "/oefenen/"
+            try:
+                if Uitleg.objects.get(vaardigheid=v):
+                    linkbase = "/oefenen/uitleg/"
+            except ObjectDoesNotExist:
+                pass
+
             lijst.append(v.naam)
             try:
                 voortgang = Voortgang.objects.get(vaardigheid=v, user=user)
-                print(voortgang.voortgang)
-                soortvaardigheid[o.letter]['vaardigheid'].append({"naam": v.naam, "voortgang" : voortgang.voortgang, "link" : "/oefenen/uitleg/" + o.letter + "/" + str(v.nummer)})
+                soortvaardigheid[o.letter]['vaardigheid'].append({"naam": v.naam, "voortgang" : voortgang.voortgang, "link" : linkbase + o.letter + "/" + str(v.nummer)})
+
             except ObjectDoesNotExist:
-                soortvaardigheid[o.letter]['vaardigheid'].append({"naam": v.naam, "voortgang" : 0.0, "link" : "/oefenen/uitleg/" + o.letter + "/" + str(v.nummer)})
-        
+                soortvaardigheid[o.letter]['vaardigheid'].append({"naam": v.naam, "voortgang" : 0.0, "link" : linkbase + o.letter + "/" + str(v.nummer)})   
     
     soortvaardigheid = json.dumps(soortvaardigheid)
     

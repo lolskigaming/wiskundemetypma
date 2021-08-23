@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import PROTECT
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib import admin
 
 # Create your models here.
@@ -17,6 +18,9 @@ class Onderwerp(models.Model):
     def __str__(self):
         return self.naam
 
+    class Meta:
+        ordering = ['letter']
+
 # Dit slaat de losse vaardigheden op, zoals "lineaire vergelijkingen oplossen", met een
 class Vaardigheid(models.Model):
     # naam en nummer
@@ -25,9 +29,9 @@ class Vaardigheid(models.Model):
     # bij behorend onderwerp
     bijbehorend_onderwerp = models.ForeignKey(Onderwerp, on_delete=models.PROTECT, blank=True, null=True)
     # lijst met voorkennis van vaardigheden
-    voorkennis = models.ManyToManyField("self", symmetrical=False, related_name="vaardigheid_voorkennis")
+    voorkennis = models.ManyToManyField("self", symmetrical=False, related_name="vaardigheid_voorkennis", blank=True, null=True)
     # lijst met volgende vaardigheden
-    volgende = models.ManyToManyField("self", symmetrical=False, related_name="vaardigheid_volgende")
+    volgende = models.ManyToManyField("self", symmetrical=False, related_name="vaardigheid_volgende", blank=True, null=True)
 
     def __str__(self):
         return self.bijbehorend_onderwerp.letter + ". " + self.naam + "  (" + str(self.nummer) + ")"
@@ -38,13 +42,13 @@ class Vaardigheid(models.Model):
 # Dit slaat een opdracht op, zoals "Los op. 3x = 6", met een
 class Opgave(models.Model):
     # opgave
-    opgave = RichTextField()
+    opgave = RichTextUploadingField()
     # evt. een plaatje
     plaatje = models.ImageField(blank=True, null=True, upload_to='images/')
     # link naar de vaardigheid waar hij bij hoort
     vaardigheid = models.ForeignKey(Vaardigheid, on_delete=models.PROTECT)
     # uitwerking
-    uitwerking = RichTextField()
+    uitwerking = RichTextUploadingField()
 
     def __str__(self):
         return "Opgave bij " + self.vaardigheid.naam + " - " + str(self.pk)
@@ -77,7 +81,7 @@ class OpdrachtVoortgang(models.Model):
 
 class Uitleg(models.Model):
     vaardigheid = models.OneToOneField(Vaardigheid, on_delete=models.PROTECT)
-    uitleg = RichTextField()
+    uitleg = RichTextUploadingField()
     voorbeeld = RichTextField(null=True, blank=True)
 
     def __str__(self):

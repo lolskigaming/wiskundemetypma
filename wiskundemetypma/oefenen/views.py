@@ -96,7 +96,8 @@ def oefenen(request, letter, pk):
         'o':opdracht,
         'letter':letter,
         'pk':pk,
-        'u':u
+        'u':u,
+        'voortgang': g.voortgang,
     })
 
 # Bepaal de volgende opdracht
