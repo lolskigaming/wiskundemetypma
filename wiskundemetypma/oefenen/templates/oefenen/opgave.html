@@ -1,213 +1,94 @@
+{% extends 'oefenen/layout.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter&family=Roboto+Mono&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Kanit:wght@500&family=Oswald&family=Russo+One&family=Yantramanav:wght@300;700&display=swap" rel="stylesheet">
-    <script>
+{% block head %}
+<script>
         
-        $(document).ready(()=> {
-            $('.slider').on('change', ()=> {
-                var slider = $('.slider').val();
-                var text = $('#slidertext');
-                var value = $('input[name="score"]')
-                if (slider == -2) {
-                    text.html('Helemaal fout.');
-                    value.val("-1.0");
-                } else if (slider == -1) {
-                    text.html('Bijna helemaal fout.');
-                    value.val("-0.5");
-                } else if (slider == 0) {
-                    text.html('Voor de helft goed.');
-                    value.val("0.25");
-                } else if (slider == 1) {
-                    text.html('Goed op rekenfout na.');
-                    value.val("0.75");
-                } else {
-                    text.html('Helemaal goed');
-                    value.val("1.0");
-                };
-            });
+    $(document).ready(()=> {
 
-            $('.opgaveribbon').click( function() {
-                var content = $(`#${$(this).html().toLowerCase()}`);
-                if (content.is(':visible')) {
-                    content.animate({'height': '0px'}, 100, function(){ content.hide()});
-                } else {
-                    content.css({height : 'auto'});
-                    var height = content.height();
-                    content.show();
-                    content.css({height: '0px'})
-                    content.animate({'height': height}, 200);
-                };
-            });
+        // Haal de titel uit de correcte plek van de database
+        $('#ribbon').children('h1').html('{{ opdracht.vaardigheid.naam }}')
 
-            var percentage = Math.round($('#opgave').attr('value') * 100);
-            if (isNaN(percentage)){
-                percentage = 0.0
+        // Slider logics
+        $('.slider').on('change', ()=> {
+            var slider = $('.slider').val();
+            var text = $('#slidertext');
+            var value = $('input[name="score"]')
+            if (slider == -2) {
+                text.html('Helemaal fout.');
+                value.val("-1.0");
+            } else if (slider == -1) {
+                text.html('Bijna helemaal fout.');
+                value.val("-0.5");
+            } else if (slider == 0) {
+                text.html('Voor de helft goed.');
+                value.val("0.25");
+            } else if (slider == 1) {
+                text.html('Goed op rekenfout na.');
+                value.val("0.75");
+            } else {
+                text.html('Helemaal goed');
+                value.val("1.0");
             };
-
-            if (percentage > 100) {
-                percentage = 100;
-            } else if (percentage < 0) {
-                percentage = 0;
-            };
-
-            $('#ribbon').append(`
-                <div style="position: absolute; margin: 20px 0 20px 0; right: 0px; top: 0px;">
-                    <div class="progressbarbackground"  style="margin-top: 18px; margin-bottom: 18px;">
-                        <div class="progressbar"  style="background-color: var(--primarylighten);width: ${percentage}px;"></div>
-                    </div>
-                    <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
-                </div>
-            `);
-
-            var letter = $('#letter').attr('value');
-            var pk = $('#pk').attr('value');
-
-            $('#backbutton').attr('href', `/oefenen/uitleg/${letter}/${pk}`);
         });
+
+        // Animatie van het uitschuiven van de opdracht tabjes
+        $('.opgaveribbon').click( function() {
+            var content = $(`#${$(this).html().toLowerCase()}`);
+            if (content.is(':visible')) {
+                content.animate({'height': '0px'}, 100, function(){ content.hide()});
+            } else {
+                content.css({height : 'auto'});
+                var height = content.height();
+                content.show();
+                content.css({height: '0px'})
+                content.animate({'height': height}, 200);
+            };
+        });
+
+        // Rond de percentages af
+        var percentage = Math.round($('#opgave').attr('value') * 100);
+        if (isNaN(percentage)){
+            percentage = 0.0
+        };
+
+        // Percentages moeten niet boven 100 of onder 0 kunnen gaan
+        if (percentage > 100) {
+            percentage = 100;
+        } else if (percentage < 0) {
+            percentage = 0;
+        };
+
+        // Toevoeging van het percentagebalkje in het titelscherm
+        $('#ribbon').append(`
+            <div style="position: absolute; margin: 20px 0 20px 0; right: 0px; top: 0px;">
+                <div class="progressbarbackground"  style="margin-top: 18px; margin-bottom: 18px;">
+                    <div class="progressbar"  style="background-color: var(--primarylighten);width: ${percentage}px;"></div>
+                </div>
+                <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
+            </div>
+        `);
+        
+        // Logica van de terugknop
+        var letter = $('#letter').attr('value');
+        var pk = $('#pk').attr('value');
+
+        $('#backbutton').attr('href', `/oefenen/uitleg/${letter}/${pk}`);
+    });
     </script>
     <style>
-        :root {
-            --primary: rgb(33,245,164);
-            --primarydarken: rgb(37,183,138);
-            --primarylighten: rgb(151,255,203);
-            --secondary: rgb(37,204,237);
-            --secondarydarken: rgb(37,172,237);
-            --secondarylighten: rgb(151,252,255);
-            --bg: white;
-            --dmbg: #454648;
-            --dmbgdarken: #18191a;
-            --dmbglighten: #babbbd;
-            --error: #d32f2f;   
-            --success: #2e7d32;
-            --whitetext: white;
-            --blacktext: black;
-
-            /* Shadow 1dp */
-            --box-shadow1dp: 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12), 0 1px 3px 0 rgba(0,0,0,0.20);
-
-            /* Shadow 2dp */
-            --box-shadow2dp: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.20);
-
-            /* Shadow 3dp */
-            --box-shadow3dp: 0 3px 4px 0 rgba(0,0,0,0.14), 0 3px 3px -2px rgba(0,0,0,0.12), 0 1px 8px 0 rgba(0,0,0,0.20);
-
-            /* Shadow 4dp */
-            --box-shadow4dp: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.20);
-
-            /* Shadow 6dp */
-            --box-shadow6dp: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.20);
-
-            /* Shadow 8dp */
-            --box-shadow8dp: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.20);
-
-            /* Shadow 9dp */
-            --box-shadow9dp: 0 9px 12px 1px rgba(0,0,0,0.14), 0 3px 16px 2px rgba(0,0,0,0.12), 0 5px 6px -3px rgba(0,0,0,0.20);
-
-            /* Shadow 12dp */
-            --box-shadow12dp: 0 12px 17px 2px rgba(0,0,0,0.14), 0 5px 22px 4px rgba(0,0,0,0.12), 0 7px 8px -4px rgba(0,0,0,0.20);
-
-            /* Shadow 16dp */
-            --box-shadow16dp: 0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.20);
-
-            /* Shadow 24dp */
-            --box-shadow24dp: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.20);
-        }
-
-        ::selection {
-            background-color: var(--primarydarken);
-            color: var(--whitetext);
-        }
-
-        body {
-            margin: 0px;
-            padding: 0px;
-            font-family: inter, sans-serif;
-        }
-        h1 {
-            font-family: kanit;
-            color: var(--whitetext);
-        }
-
-        html {
-            margin: 0px;
-            padding: 0px;
-        }
         #nakijken {
             display: none;
             height: 0px;
         }
         #uitleg {
             display: none;
-            height: 0px;
+            padding-bottom: 48px;
         }
         #afbeelding {
             width:300px;
             height:300px;
             box-shadow: var(--box-shadow2dp);
         }
-        #ribbon {
-            margin: 0px;
-            top: 0px;
-            width: 100%;
-            height: 100px;
-            background-color: var(--primarydarken);
-            position: fixed;
-            line-height: 50px;
-            text-align: center;
-            box-shadow: var(--box-shadow4dp);
-        }
-
-        #background {
-            background-color: var(--dmbg);
-            height: 100%;
-            width: 100%;
-            position: absolute;
-        }
-        
-        #backbutton {
-            position: absolute;
-            left: 0px;
-            padding: 0 8px 0 8px;
-            margin: 30px;
-            height: 40px;
-            max-width: 132px;
-            background-color: var(--primarydarken);
-            border: solid;
-            border-color: var(--whitetext);
-            border-width: 2px;
-            font-family: yantramanav;
-            font-size: 28px;
-            color: var(--whitetext);
-            border-radius: 0px;
-        }
-
-        #backbutton:hover {
-            background-color: var(--bg);
-            color: var(--primarydarken);
-        }
-
-        #backbutton:hover .backbuttontext {
-            color: var(--primarydarken);
-        }
-
-        .backbuttontext {
-            font-family: yantramanav;
-            font-size: 28px;
-            color: var(--whitetext);
-            margin: 0px;
-            float: right;
-            line-height: 40px;
-        }
-
         #opgave {
             margin-left: 20%;
             margin-right: 20%;
@@ -351,49 +232,42 @@
             margin: 16px 0 16px 0;
         }
     </style>
-</head>
-<body>
+{% endblock %}
+{% block body %}
     <!-- Print de opdracht en evt. het plaatje erbij -->
-    <div id="background">
-    <div id="ribbon">
-        <a id="backbutton"><i class="material-icons-outlined" style="float: left; margin: 6px 0 8px 0;">arrow_back</i><p class="backbuttontext">TERUG</p></a>
-        <h1>{{ opdracht.vaardigheid.naam }}</h1>
-    </div>
-    <div style="height: 100px;"></div>
-    
-    <div id="opgave" value="{{ voortgang }}">
-        <div class="opgaveribbon">LOS OP:</div>
-        <div class="opgavetext" id="opgavetext">{{ o.opdracht|safe }}
-            {% if opdracht.plaatje %}
-            <div id="plaatje"><img src="{{ opdracht.plaatje.url }}"></div>
-            {% endif %}
-        </div>
+<div style="height: 100px;"></div>
 
-        <div class="opgaveribbon">NAKIJKEN</div>
-        <div id="nakijken">
-            <div class="opgavetext">{{ o.uitwerking|safe }}</div>
-            <hr class="solid">
-            <form method="post" id=score action="{% url 'volgende' %}">    
-                {% csrf_token %}
-                <input type="hidden" id="letter" name="letter" value="{{ letter }}">
-                <input type="hidden" id="pk" name="pk" value="{{ pk }}">
-                <input type="hidden" id="opdracht" name="opdracht" value="{{ opdracht.opgave }}">
-                <input type="hidden" name="score" value="0.25">
-                <div id="slidecontainer">
-                    <input type="range" min="-2" max="2" value="0" class="slider" id="myrange">
-                    <p id="slidertext">Voor de helft goed.</p>
-                    <input id="submitbutton" type="submit" value="VOLGENDE">
-                    
-                </div>
-            </form>
-        </div>
-        <div class="opgaveribbon">UITLEG</div>
-        <div id="uitleg">
-            <p class="subheader">Theorie:</p>
-            <div class="opgavetext">{{ u.uitleg|safe }}</div>
-            <p class="subheader">Voorbeeld:</p>
-            <div class="opgavetext">{{ u.voorbeeld|safe }}</div>
-        </div>
+<div id="opgave" value="{{ voortgang }}">
+    <div class="opgaveribbon">LOS OP</div>
+    <div class="opgavetext" id="opgavetext">{{ o.opdracht|safe }}
+        {% if opdracht.plaatje %}
+        <div id="plaatje"><img src="{{ opdracht.plaatje.url }}"></div>
+        {% endif %}
     </div>
-</body>
-</html>
+
+    <div class="opgaveribbon">NAKIJKEN</div>
+    <div id="nakijken">
+        <div class="opgavetext">{{ o.uitwerking|safe }}</div>
+        <hr class="solid">
+        <form method="post" id=score action="{% url 'volgende' %}">    
+            {% csrf_token %}
+            <input type="hidden" id="letter" name="letter" value="{{ letter }}">
+            <input type="hidden" id="pk" name="pk" value="{{ pk }}">
+            <input type="hidden" id="opdracht" name="opdracht" value="{{ opdracht.opgave }}">
+            <input type="hidden" name="score" value="0.25">
+            <div id="slidecontainer">
+                <input type="range" min="-2" max="2" value="0" class="slider" id="myrange">
+                <p id="slidertext">Voor de helft goed.</p>
+                <input id="submitbutton" type="submit" value="VOLGENDE">
+                
+            </div>
+        </form>
+    </div>
+    <div class="opgaveribbon">UITLEG</div>
+    <div id="uitleg">
+        <p class="subheader">Theorie:</p>
+        <div class="opgavetext">{{ u.uitleg|safe }}</div>
+        <p class="subheader">Voorbeeld:</p>
+        <div class="opgavetext">{{ u.voorbeeld|safe }}</div>
+    </div>
+{% endblock %}

@@ -1,140 +1,7 @@
-{% load static %}
+{% extends 'oefenen/layout.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Uitleg</title>
-    <script src="{% static 'ckeditor/ckeditor/plugins/ckeditor_wiris/plugin.js' %}"></script>
-    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Inter&family=Roboto+Mono&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Kanit:wght@500&family=Oswald&family=Russo+One&family=Yantramanav:wght@300;700&display=swap" rel="stylesheet">
-</head>
+{% block head %}
 <style>
-    :root {
-        --primary: rgb(33,245,164);
-        --primarydarken: rgb(37,183,138);
-        --primarylighten: rgb(151,255,203);
-        --secondary: rgb(37,204,237);
-        --secondarydarken: rgb(37,172,237);
-        --secondarylighten: rgb(151,252,255);
-        --bg: white;
-        --dmbg: #454648;
-        --dmbgdarken: #18191a;
-        --dmbglighten: #babbbd;
-        --error: #d32f2f;   
-        --success: #2e7d32;
-        --whitetext: white;
-        --blacktext: black;
-
-        /* Shadow 1dp */
-        --box-shadow1dp: 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12), 0 1px 3px 0 rgba(0,0,0,0.20);
-
-        /* Shadow 2dp */
-        --box-shadow2dp: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.20);
-
-        /* Shadow 3dp */
-        --box-shadow3dp: 0 3px 4px 0 rgba(0,0,0,0.14), 0 3px 3px -2px rgba(0,0,0,0.12), 0 1px 8px 0 rgba(0,0,0,0.20);
-
-        /* Shadow 4dp */
-        --box-shadow4dp: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.20);
-
-        /* Shadow 6dp */
-        --box-shadow6dp: 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12), 0 3px 5px -1px rgba(0,0,0,0.20);
-
-        /* Shadow 8dp */
-        --box-shadow8dp: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.20);
-
-        /* Shadow 9dp */
-        --box-shadow9dp: 0 9px 12px 1px rgba(0,0,0,0.14), 0 3px 16px 2px rgba(0,0,0,0.12), 0 5px 6px -3px rgba(0,0,0,0.20);
-
-        /* Shadow 12dp */
-        --box-shadow12dp: 0 12px 17px 2px rgba(0,0,0,0.14), 0 5px 22px 4px rgba(0,0,0,0.12), 0 7px 8px -4px rgba(0,0,0,0.20);
-
-        /* Shadow 16dp */
-        --box-shadow16dp: 0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.20);
-
-        /* Shadow 24dp */
-        --box-shadow24dp: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.20);
-    }
-
-    ::selection {
-        background-color: var(--primarydarken);
-        color: var(--whitetext);
-    }
-
-    body {
-        margin: 0px;
-        padding: 0px;
-        font-family: inter, sans-serif;
-    }
-    h1 {
-        font-family: kanit;
-        color: var(--whitetext);
-    }
-
-    html {
-        margin: 0px;
-        padding: 0px;
-    }
-    #ribbon {
-        margin: 0px;
-        top: 0px;
-        width: 100%;
-        height: 100px;
-        background-color: var(--primarydarken);
-        position: fixed;
-        line-height: 50px;
-        text-align: center;
-        box-shadow: var(--box-shadow4dp);
-    }
-    #backbutton {
-        position: absolute;
-        left: 0px;
-        padding: 0 8px 0 8px;
-        margin: 30px;
-        height: 40px;
-        max-width: 132px;
-        background-color: var(--primarydarken);
-        border: solid;
-        border-color: var(--whitetext);
-        border-width: 2px;
-        font-family: yantramanav;
-        font-size: 28px;
-        color: var(--whitetext);
-        border-radius: 0px;
-    }
-
-    #backbutton:hover {
-        background-color: var(--bg);
-        color: var(--primarydarken);
-    }
-
-    #backbutton:hover .backbuttontext {
-        color: var(--primarydarken);
-    }
-
-    .backbuttontext {
-        font-family: yantramanav;
-        font-size: 28px;
-        color: var(--whitetext);
-        margin: 0px;
-        float: right;
-        line-height: 40px;
-    }
-    #background {
-        background-color: var(--dmbg);
-        height: 100%;
-        width: 100%;
-        position: fixed;
-        overflow-y: scroll;
-        display: inline-block;
-    }
     #uitleg {
         margin: 60px 20% 20px 20%;
     }
@@ -196,27 +63,24 @@
         line-height: 40px;
     }
 </style>
-<body>
-    <!-- Render de uitleg op basis van de uitleg variabele van views.py -->
-    <div id="background">
-        <div id="ribbon">
-            <a id="backbutton" href="/gebruiker"><i class="material-icons-outlined" style="float: left; margin: 6px 0 8px 0;">arrow_back</i><p class="backbuttontext">TERUG</p></a>
-            <h1>{{ uitleg.vaardigheid.naam }}</h1>
-        </div>
-        <div id="uitleg">
-            <div style="height: 100px;"></div>
-            
-            <div class="theoriebackground">
-                <div class="opgaveribbon">Theorie</div>
-                <div class="opgavetext">{{ uitleg.uitleg|safe }}</div>
-            </div>
-            
-            <div class="theoriebackground">
-                <div class="opgaveribbon">Voobeeld</div>
-                <div class="opgavetext">{{ uitleg.voorbeeld|safe }}</div>
-            </div>
-        </div>
-        <a id="oefenknop" href="/oefenen/{{ letter }}/{{ pk }}"><p id="oefenknoptext">OEFEN!</p></a>
+{% endblock %}
+{% block body %}
+
+<!-- Render de uitleg op basis van de uitleg variabele van views.py -->
+<div id="uitleg">
+    <div style="height: 100px;"></div>
+    
+    <div class="theoriebackground">
+        <div class="opgaveribbon">Theorie</div>
+        <div class="opgavetext">{{ uitleg.uitleg|safe }}</div>
     </div>
-</body>
-</html>
+    
+    <div class="theoriebackground">
+        <div class="opgaveribbon">Voorbeeld</div>
+        <div class="opgavetext">{{ uitleg.voorbeeld|safe }}</div>
+    </div>
+</div>
+<a id="oefenknop" href="/oefenen/{{ letter }}/{{ pk }}"><p id="oefenknoptext">OEFEN!</p></a>
+
+{% endblock %}
+

@@ -25,7 +25,7 @@
                 if ($(this).html().toLowerCase() === window.location.href.slice(22)) {
                     $(this).css('background', 'var(--primarydarken)')
                 } else {
-                    $(this).css('background', 'var(--dmbgdarken)')
+                    //$(this).css('background', 'var(--dmbgdarken)')
                 }
             });
 
@@ -162,6 +162,7 @@
         html {
             padding: 0px;
             margin: 0px;
+            background-color: var(--dmbg);
         }
 
         .subtitle {
@@ -413,10 +414,10 @@
         <div id="navbar">
             <div class="navbaritem" >HOME</div>
             <div class="navbaritem" >OVER</div>
-            <div class="navbaritem" >BLOG</div>
+            <!--<div class="navbaritem" >BLOG</div> -->
             {% if request.user.is_authenticated %}
             <div class="navbaritem" >GEBRUIKER</div>
-            <div class="navbaritem" >LEADERBOARD</div>
+            <!--<div class="navbaritem" >LEADERBOARD</div>-->
             {% else %}
             <div class="navbaritem" style="float: right;">REGISTREREN</div>
             <div class="navbaritem" style="float: right;">INLOGGEN</div>
@@ -427,7 +428,7 @@
         </div>
         <div id="page">
             <div id="content" value="{{ animate }}" class="contentbegone contentwelcome">
-                {% block body%}
+                {% block body %}
 
                 {% endblock %}
             </div>
