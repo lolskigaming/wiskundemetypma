@@ -1,24 +1,111 @@
-<!-- USELESS FILE -->
+{% extends 'oefenen/layout.html'%}
 
-{% load mathfilters %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Overzicht</title>
-</head>
-<body>
+{% block head %}
+    <script>
+        $(document).ready( ()=> {
+            var lijst = JSON.parse($('#overzicht').attr('value'));
+            var letter = $('#listcontainer').attr('value');
+            var gemiddeldevoortgang = 0.0;
+            console.log(lijst)
+            for (var v = 0; !(lijst[v] == undefined); v++) {
+
+                var backgroundcolor = "var(--dmbglighten)";
+                if (v % 2 == 0) {
+                    backgroundcolor = "#cacbcd"
+                }
+
+                $('#listcontainer').append(`
+                    <div class="row" style="background-color: ${backgroundcolor}; z-index: 1;">
+                        
+                        <a href="/oefenen/uitleg/${letter}/${lijst[v][1]}"><p class="vaardigheid rowitem">${lijst[v][0]}</p></a>
+                        <div class="progressbarbackground"><div class="progressbar" style="width: ${lijst[v][2] * 100}px"></div></div>
+                        <p class="progress">${Math.round(lijst[v][2] * 100)}%</p>
+                    </div>
+                `)
+
+                gemiddeldevoortgang += lijst[v][2]
+            };
+
+            var percentage = Math.round(gemiddeldevoortgang / Object.keys(lijst).length * 100);
+            if (isNaN(percentage)){
+                percentage = 0.0
+            };
+
+            $('#listtitle').append(`
+                <div >
+                <div class="progressbarbackground"  style="margin-top: 18px; margin-bottom: 18px;">
+                    <div class="progressbar"  style="background-color: var(--primarylighten);width: ${gemiddeldevoortgang / Object.keys(lijst).length * 100}px;"></div>
+                </div>
+                <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
+                </div>
+            `);
+        });
+    </script>
+    <style>
+        .progressbarbackground {
+            width: 100px;
+            background-color: var(--bg);
+            height: 24px;
+            float: right;
+            margin: 8px;
+            right: 0px;
+        }
+
+        .progressbar {
+            width: 0px;
+            height: 100%;
+            background-color: var(--secondarylighten);
+        }
+
+        .progress {
+            line-height: 40px;
+            margin: 0px;
+            float: right;
+            color: var(--blacktext);
+            font-family: Roboto Mono;
+        }
+        #overzicht {
+            margin: 120px 20% 0 20%;
+        }
+        #listcontainer {
+            background-color: var(--primary);
+            box-shadow: var(--box-shadow4dp);
+        }
+        #listtitle {
+            box-shadow: var(--box-shadow2dp);
+            z-index: 4;
+            height: 60px;
+            position: relative;
+        }
+        .vaardigheid {
+            margin: 0px;
+            padding-left: 16px;
+            font-size: 20px;
+            line-height: 40px;
+            font-family: inter;
+            color: rgba(0,0,0,0.85);
+        }
+        .vaardigheid:hover {
+            text-decoration: underline;
+        }
+        .row {
+            height: 40px;
+        }
+    </style>
+{% endblock %}
+{% block body %}
     <!-- Print het overzicht uit met een mooie link naar het begin van die vaardigheid -->
-    <h1>Overzicht bij het onderwerp {{ v.0.bijbehorend_onderwerp.naam }}</h1>
-    <ul>
-        {% for each in v %}
-        <li>
-            <a href="/oefenen/uitleg/{{ each.0.bijbehorend_onderwerp.letter }}/{{ each.0.nummer }}">{{ each.0.naam }}</a>
-            {{ each.1|mul:100 }}%
-        </li>
-        {% endfor %}
-    </ul>
-</body>
-</html>
+    <div id="overzicht" value="{{ lijst }}">
+        <h1 style="margin-bottom: 0px;">Overzicht bij het onderwerp</h1>
+        <p style="margin-top: 0px; color: var(--whitetext)">Kies een vaardigheid uit de lijst om te oefenen.</p>
+        <div id="listcontainer" value="{{ letter }}">
+            <div id="listtitle" class="row">
+                <div class="rowitem"><h1 style="padding: 8px; margin: 0px;">{{ onderwerp }}</h1></div>
+            </div>
+        </div>
+
+        
+    </div>
+    
+    
+{% endblock %}

@@ -7,49 +7,39 @@
         $('#content').addClass('contentwelcome');
 
         var vlijst = JSON.parse($('#onderwerplijst').attr('value'));
-        console.log(vlijst.A.naam)
-        for (o in vlijst) {
-            var gemiddeldevoortgang = 0.0;
-            $('#onderwerplijst').append(`<div id="onderwerp${o}"></div>`);
-            $(`#onderwerp${o}`).append(`<div class="onderwerpheader row"><p class="onderwerptitel rowitem">${o}: ${vlijst[o].naam}</p></div>`);
-            $(`#onderwerp${o}`).append('<div class="vaardigheidlijst" hidden></div>')
-            $(`#onderwerp${o}`).css({'background-color': 'var(--dmbglighten)', 'position': 'relative'});
-            $(`#onderwerp${o}`).addClass('onderwerp');
-            for (v in Object.keys(vlijst[o].vaardigheid)) {
-                var iconcolor = "var(--whitetext)";
-                var backgroundcolor = "var(--dmbglighten)";
-                gemiddeldevoortgang += vlijst[o].vaardigheid[v].voortgang;
-                if (vlijst[o].vaardigheid[v].voortgang >= 1.0) {
-                    iconcolor = "var(--secondarylighten)"
-                    vlijst[o].vaardigheid[v].voortgang = 1.0;
-                }
+        var number = 0
 
-                if (v % 2 == 0) {
+        for (o in vlijst) {
+            
+                number++    
+               
+                var backgroundcolor = "var(--dmbglighten)";
+                
+                
+                if (number % 2 == 0) {
                     backgroundcolor = "#cacbcd"
                 }
-                $(`#onderwerp${o} .vaardigheidlijst`).append(`
-                <div class="row" style="background-color: ${backgroundcolor};">
-                    <i class="material-icons rowitem vaardigheidicon" style="color: ${iconcolor};">circle</i>
-                    <a href="${vlijst[o].vaardigheid[v].link}"><p class="vaardigheid rowitem">${vlijst[o].vaardigheid[v].naam}</p></a>
-                    <div class="progressbarbackground"><div class="progressbar" style="width: ${vlijst[o].vaardigheid[v].voortgang * 100}px"></div></div>
-                    <p class="progress">${Math.round(vlijst[o].vaardigheid[v].voortgang * 100)}%</p>
+                $(`.onderwerpbigheader`).append(`
+                <div class="row" style="background-color: ${backgroundcolor}; z-index: 1;">
+                    <p class="rowitem onderwerpletter">${o}</p>
+                    <a href="/oefenen/overzicht/${o}"><p class="onderwerp rowitem">${vlijst[o].naam}</p></a>
+                    
                 </div>
-                `);
-            };
+                `); 
 
-            var percentage = Math.round(gemiddeldevoortgang / Object.keys(vlijst[o].vaardigheid).length * 100);
-            if (isNaN(percentage)){
-                percentage = 0.0
-            };
 
+            
+            /*
             $(`#onderwerp${o} .onderwerpheader `).append(`
                 <div class="progressbarbackground"  style="margin-top: 18px; margin-bottom: 18px;">
                     <div class="progressbar"  style="background-color: var(--primarylighten);width: ${gemiddeldevoortgang / Object.keys(vlijst[o].vaardigheid).length * 100}px;"></div>
                 </div>
                 <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
             `);
+            */
         };
 
+        /* DEZE ANIMATIE KAN NOG GEBRUIKT WORDEN
         $('.onderwerpheader').click( function() {
             var onderwerp = $(this).parent();
             $(onderwerp).css({height: 'auto'});
@@ -63,6 +53,7 @@
             $(this).css('box-shadow', 'var(--box-shadow4dp)')
             
         });
+        */
         
     });
 </script>
@@ -132,12 +123,15 @@
         z-index: 4;
     }
     
-    .onderwerp {
-        width: 100%;
-        height: auto;
+    .onderwerpletter {
+        margin: 0px 0px 0px 16px;
+        line-height: 40px;
+        font-family: Roboto Mono;
+        font-size: 16px;
+        color: rgba(0,0,0,0.85);
     }
 
-    .vaardigheid {
+    .onderwerp {
         margin: 0px;
         padding-left: 16px;
         font-size: 20px;
@@ -146,7 +140,7 @@
         color: rgba(0,0,0,0.85);
     }
 
-    .vaardigheid:hover {
+    .onderwerp:hover {
         text-decoration: underline;
         color: rgba(0,0,0,1)
     }
@@ -156,7 +150,7 @@
     }
 
     .onderwerpbigheader {
-        width: 100%; 
+        width: 500px; 
         background-color: var(--primarydarken); 
         z-index: 3;
         position: relative;
@@ -167,8 +161,10 @@
 {% endblock %}
 
 {% block body %}
-<h1>welkom, {{ user }}</h1>
-<p>Dit is jou eigen gebruikers pagina. Je kan hier snel navigeren naar een vaardigheid of een oefentoets maken. Je kan ook de wekelijkse opdracht maken.</p>
-<div class="onderwerpbigheader"><h1 style="padding: 8px;">Vaardigheden:</h1></div>
+<h1>Welkom, {{ user }}</h1>
+<p>Dit is jou eigen gebruikers pagina. Je kan hier snel navigeren naar een vaardigheid of snel een vaardigheid oefenen die je nog niet goed beheerst.</p>
+<div class="onderwerpbigheader">
+    <div style="box-shadow: var(--box-shadow2dp); position: relative; z-index: 4;"><h1 style="padding: 8px;">Onderwerpen:</h1></div>
+</div>
 <div id="onderwerplijst" value="{{ soortvaardigheid }}"></div>
 {% endblock %}

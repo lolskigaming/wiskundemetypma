@@ -1,6 +1,12 @@
 {% extends 'oefenen/layout.html' %}
 
 {% block head %}
+<script>
+    $(document).ready( ()=> {
+        var letter = $('#uitleg').attr('value')
+        $('#backbutton').attr('href', `/oefenen/overzicht/${letter}`);
+    });
+</script>
 <style>
     #uitleg {
         margin: 60px 20% 20px 20%;
@@ -67,7 +73,7 @@
 {% block body %}
 
 <!-- Render de uitleg op basis van de uitleg variabele van views.py -->
-<div id="uitleg">
+<div id="uitleg" value="{{ letter }}">
     <div style="height: 100px;"></div>
     
     <div class="theoriebackground">

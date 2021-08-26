@@ -18,27 +18,25 @@
     <script>
         $(document).ready(function() {
 
+            // Geef een kleurtje aan de juiste navbaritem
             $('.navbaritem').each( function() {
-                // ----------------------------------------------------------------------------------------------------------------
-                // slice(22) IS HARDCODED, ALS WE ANDERE IP HEBBEN MOOEEETTTTT DIT AANGEPAST WORDEN, DIT IS ALLEEN TESTING PURPOSE
-                // ----------------------------------------------------------------------------------------------------------------
-                if ($(this).html().toLowerCase() === window.location.href.slice(22)) {
-                    $(this).css('background', 'var(--primarydarken)')
-                } else {
-                    //$(this).css('background', 'var(--dmbgdarken)')
+                if ($(this).html().toLowerCase() === window.location.pathname.replace('/', '')) {
+                    $(this).css('background', 'var(--primarydarken)');
                 }
             });
-
+            
+            // Parallax effect
             $(document).scroll( ()=> {
                 $('#backgroundimage').css('top', $(document).scrollTop() * -0.3);
             });
             
-
+            // Hoogte van het scherm en de breedte
             var screeny =  $(document).height();
             var screenx = $(document).width();
 
             $('#page').css('height', (screeny - 380).toString() + 'px');
 
+            // Animatie van heen en weer gaan tussen pagina's
             $('.navbaritem').click( function(event) {
                 if (window.location.pathname.includes($(this).html()) === false) {
                     $('#content').removeClass('contentwelcome');
@@ -53,8 +51,10 @@
                 }
             });
 
+            // Statusbericht vanuit de backend
             var status = $('#modal').attr('value');
             
+            // Geef het statusbericht een kleurtje en een animatie
             if (status.length !== 0) {
 
                 $('#modal').show();

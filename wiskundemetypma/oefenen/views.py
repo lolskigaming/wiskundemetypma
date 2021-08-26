@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 import datetime
+import json
 
 # Create your views here.
 
@@ -38,7 +39,7 @@ def oefenen(request, letter, pk):
     # Sla wat data op
     uid = request.user.id
     user = User.objects.get(id=uid)
-    o = Onderwerp.objects.get(letter=letter.capitalize())
+    o = Onderwerp.objects.get(letter=letter.upper())
     v = Vaardigheid.objects.get(bijbehorend_onderwerp=o, nummer=pk)
 
     # Als deze pagina wordt geladen, checken we ook gelijk de tijdsfactor
@@ -98,6 +99,7 @@ def oefenen(request, letter, pk):
         'pk':pk,
         'u':u,
         'voortgang': g.voortgang,
+        'onderwerp': o.naam
     })
 
 # Bepaal de volgende opdracht
@@ -106,7 +108,7 @@ def volgende(request):
     if request.method == "POST":
         # sla wat data op
         score = float(request.POST["score"])
-        o = Onderwerp.objects.get(letter=request.POST["letter"].capitalize())
+        o = Onderwerp.objects.get(letter=request.POST["letter"].upper())
         v = Vaardigheid.objects.get(bijbehorend_onderwerp=o, nummer=request.POST["pk"])
         user = User.objects.get(id=request.user.id)
         g = Gebruiker.objects.get(user=user)
@@ -172,7 +174,7 @@ def uitleg(request, letter, pk):
     # Sla wat data op
     uid = request.user.id
     user = User.objects.get(id=uid)
-    o = Onderwerp.objects.get(letter=letter.capitalize())
+    o = Onderwerp.objects.get(letter=letter.upper())
     v = Vaardigheid.objects.get(bijbehorend_onderwerp=o, nummer=pk)
 
     # Haal de juiste uitleg uit de database
@@ -182,14 +184,15 @@ def uitleg(request, letter, pk):
     return render(request, "oefenen/uitleg.html", {
         'uitleg':uitleg,
         'letter':letter,
-        'pk':pk
+        'pk':pk,
+        'onderwerp': o.naam
     })
 
 # Render het overzicht van een onderwerp + alle voortgang per vaardigheid
 @login_required
 def overzicht(request, letter):
     # Sla wat data op
-    o = Onderwerp.objects.get(letter=letter.capitalize())
+    o = Onderwerp.objects.get(letter=letter.upper())
     v = Vaardigheid.objects.filter(bijbehorend_onderwerp=o)
     user = User.objects.get(id=request.user.id)
 
@@ -200,18 +203,22 @@ def overzicht(request, letter):
             voortg = Voortgang.objects.get(vaardigheid=each, user=user)
             # (je kan ook een negatieve voortgang hebben of groter dan 1, maar dat printen we niet)
             if voortg.voortgang < 0:
-                vaardigheid.append((each, 0))
+                vaardigheid.append([each.naam, each.nummer, 0])
                 continue
             if voortg.voortgang >= 0.995:
-                vaardigheid.append((each, 1))
+                vaardigheid.append([each.naam, each.nummer, 1])
                 continue
-            vaardigheid.append((each, voortg.voortgang))
+            vaardigheid.append([each.naam, each.nummer, voortg.voortgang])
         except:
-            vaardigheid.append((each, 0))
-
+            vaardigheid.append([each.naam, each.nummer, 0])
+    print(vaardigheid)
+    vjson = json.dumps(vaardigheid)
     # Stuur alle data door naar de goede template
     return render(request, "oefenen/overzicht.html", {
-        "v":vaardigheid
+        "v":vaardigheid,
+        "lijst":vjson,
+        "onderwerp": o.naam,
+        "letter": o.letter
     })
 
 # Zorg dat er elke dag 1 procent aan voortgang van een vaardigheid afgaat

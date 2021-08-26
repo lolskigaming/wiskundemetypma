@@ -84,6 +84,16 @@
             font-family: kanit;
             color: var(--whitetext);
         }
+        
+
+        .row {
+            width: 100%
+        }
+
+        .rowitem  {
+            height: 100%;
+            float: left;
+        }
 
         html {
             margin: 0px;
@@ -143,12 +153,15 @@
             overflow-y: scroll;
             display: inline-block;
         }
+        .center {
+            text-align: center;
+        }
     </style>
     <body>
         <div id="background">
             <div id="ribbon">
                 <a id="backbutton" href="/gebruiker"><i class="material-icons-outlined" style="float: left; margin: 6px 0 8px 0;">arrow_back</i><p class="backbuttontext">TERUG</p></a>
-                <h1>{{ uitleg.vaardigheid.naam }}</h1>
+                <h1>{{ onderwerp }}</h1>
             </div>
             {% block body %}
 
