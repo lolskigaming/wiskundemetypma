@@ -7,7 +7,7 @@
             var letter = $('#listcontainer').attr('value');
             var gemiddeldevoortgang = 0.0;
             console.log(lijst)
-            for (var v = 0; !(lijst[v] == undefined); v++) {
+            for (var v = 0; !(lijst[v] === undefined); v++) {
 
                 var backgroundcolor = "var(--dmbglighten)";
                 if (v % 2 == 0) {
@@ -91,6 +91,43 @@
         .row {
             height: 40px;
         }
+        #oefenknop {
+            position: absolute;
+            left: 50%;
+            margin: 40px 0px 100px 0px;
+            transform: translate(-50%, 0);
+            padding: 4px 16px 4px 16px;
+            height: 40px;
+            max-width: 400px;
+            background-color: var(--primarydarken);
+            font-family: yantramanav;
+            font-size: 28px;
+            color: var(--whitetext);
+            border-radius: 0px;
+            text-decoration: none;
+            box-shadow: var(--box-shadow2dp);
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        #oefenknop:hover {
+            box-shadow: var(--box-shadow8dp);
+        }
+
+        #oefenknop::after {
+            content: '';
+            position: absolute;
+            top: 100px;
+            height: 20px;
+            width: 100%;
+        }
+
+        #oefenknoptext {
+            font-family: yantramanav;
+            font-size: 28px;
+            color: var(--whitetext);
+            margin: 0px;
+            float: right;
+            line-height: 40px;
+        }
     </style>
 {% endblock %}
 {% block body %}
@@ -103,6 +140,8 @@
                 <div class="rowitem"><h1 style="padding: 8px; margin: 0px;">{{ onderwerp }}</h1></div>
             </div>
         </div>
+
+        <!--<a id="oefenknop" href="/hoiditisvincentsprobleem"><p id="oefenknoptext">OEFEN DIT ONDERWERP</p></a>-->
 
         
     </div>

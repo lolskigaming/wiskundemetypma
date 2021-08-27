@@ -3,61 +3,178 @@
 {% block head %}
 <script>
     $(document).ready( ()=> {
+        ``
         
         $('#content').addClass('contentwelcome');
 
         var vlijst = JSON.parse($('#onderwerplijst').attr('value'));
-        var number = 0
+        var number = 1
+        var klassen = []
 
         for (o in vlijst) {
             
-                number++    
-               
-                var backgroundcolor = "var(--dmbglighten)";
+            number++    
+            
+            var backgroundcolor = "var(--dmbglighten)";
+            
+            
+            if (number % 2 == 0) {
+                backgroundcolor = "#cacbcd"
+            }
+            $(`.onderwerpbigheader`).append(`
+            <div class="row" style="background-color: ${backgroundcolor}; z-index: 1;">
+                <p class="rowitem onderwerpletter fullletter">${o}</p>
+                <a href="/oefenen/overzicht/${o}"><p class="onderwerp rowitem">${vlijst[o].naam}</p></a>
                 
-                
-                if (number % 2 == 0) {
-                    backgroundcolor = "#cacbcd"
-                }
-                $(`.onderwerpbigheader`).append(`
-                <div class="row" style="background-color: ${backgroundcolor}; z-index: 1;">
-                    <p class="rowitem onderwerpletter">${o}</p>
-                    <a href="/oefenen/overzicht/${o}"><p class="onderwerp rowitem">${vlijst[o].naam}</p></a>
-                    
-                </div>
-                `); 
-
+            </div>
+            `); 
 
             
-            /*
-            $(`#onderwerp${o} .onderwerpheader `).append(`
-                <div class="progressbarbackground"  style="margin-top: 18px; margin-bottom: 18px;">
-                    <div class="progressbar"  style="background-color: var(--primarylighten);width: ${gemiddeldevoortgang / Object.keys(vlijst[o].vaardigheid).length * 100}px;"></div>
+            var klas = o.slice(0,2);
+            if (klassen.indexOf(klas) === -1) {
+                klassen.push(klas)
+            };
+
+        };
+        
+        for (var k = 0; !(klassen[k] === undefined); k++) {
+            var backgroundcolor = "var(--dmbglighten)";
+            var savedklassen = JSON.parse(localStorage.getItem("SavedKlassen"));
+
+            if (k % 2 == 0) {
+                backgroundcolor = "#cacbcd"
+            }
+
+            // kijk of er al iets is opgeslagen in localstorage, zo niet: voeg de missende variabelen toe
+            try {
+                if (savedklassen[k].istrue === undefined) {
+                    savedklassen[k] = {'istrue': true};
+                };
+            } catch (error) {
+                try {
+                    savedklassen.push({'istrue': true});
+                } catch (error) {
+                    savedklassen = [];
+                    savedklassen.push({'istrue': true})
+                }
+                
+            }
+
+            
+            
+            $('#sortform').append(`
+                <div id="checkcont${k}" class="row" style="background-color: ${backgroundcolor}; z-index: 1;">
+                    <p class="rowitem onderwerpletter">${klassen[k]}</p>
+                    <label class="checkcontainer">
+                        <input type="checkbox" name="check${k}">
+                        <span class="checkmark"></span>
+                    </label>
                 </div>
-                <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
             `);
-            */
+            
+            if (savedklassen[k].istrue) {
+                $(`input[name="check${k}"]`).prop('checked', true);
+            };
+            
+            localStorage.setItem("SavedKlassen", JSON.stringify(savedklassen));
+            
         };
 
-        /* DEZE ANIMATIE KAN NOG GEBRUIKT WORDEN
-        $('.onderwerpheader').click( function() {
-            var onderwerp = $(this).parent();
-            $(onderwerp).css({height: 'auto'});
-            var height = $(onderwerp).height();
-            $(onderwerp).toggle();
-            $(onderwerp).children('.vaardigheidlijst').toggle();
-            var height2 = $(onderwerp).height();
-            $(onderwerp).css({height: height});
-            $(onderwerp).toggle();
-            $(onderwerp).animate({'height': height2}, 200);
-            $(this).css('box-shadow', 'var(--box-shadow4dp)')
+        ApplyFilter();
+
+        $('input[type="checkbox"]').on('change', function() {
+            var savedklassen = JSON.parse(localStorage.getItem("SavedKlassen"));
             
+            if ($(this).prop("checked")) {
+                savedklassen[$(this).attr("name").slice(-1)].istrue = true
+            } else {
+                savedklassen[$(this).attr("name").slice(-1)].istrue = false
+            };
+            localStorage.setItem("SavedKlassen", JSON.stringify(savedklassen));
+            ApplyFilter(); 
         });
-        */
         
     });
+
+    // Functie die de filter toepast
+    function ApplyFilter() {
+        var savedklassen = JSON.parse(localStorage.getItem("SavedKlassen"));
+        console.log(savedklassen)
+        for (var k = 0; !(savedklassen[k] === undefined); k++) {
+            var letters = $(`#checkcont${k} > p`).html();
+            console.log(letters);
+            if (savedklassen[k].istrue) {
+                $(".fullletter").each( function() {
+                    if ($(this).html().includes(letters)) {
+                        $(this).parent().show();
+                        console.log("show")
+                    };
+                });
+            } else {
+                $(".fullletter").each( function() {
+                    if ($(this).html().includes(letters)) {
+                        $(this).parent().hide();
+                    };
+                });
+            };
+        };
+
+        var n = 0
+        $('.fullletter').each( function() {
+            
+            
+            
+            if ($(this).parent().is(':visible')) {
+                var backgroundcolor = "var(--dmbglighten)";
+                
+                if (n % 2 == 0) {
+                    backgroundcolor = "#cacbcd";
+                };
+                
+                $(this).parent().css('background-color', backgroundcolor);
+                n++
+            }
+            
+            
+            console.log(n);
+        });
+    };
+
+    
 </script>
 <style>
+    .checkcontainer {
+        display: block;
+        position: relative;
+        float: right;
+        cursor: pointer;
+        padding: 10px;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    .checkcontainer input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+    .checkmark {
+        position: absolute;
+        right: 10px;
+        height: 20px;
+        width: 20px;
+        background-color: var(--whitetext);
+    }
+    .checkcontainer:hover input ~ .checkmark {
+        background-color: rgb(256,256,256,0.8);
+    }
+    .checkcontainer input:checked ~ .checkmark {
+        background-color: var(--secondarylighten);
+    }
+
     .progressbarbackground {
         width: 100px;
         background-color: var(--bg);
@@ -150,9 +267,18 @@
     }
 
     .onderwerpbigheader {
-        width: 500px; 
+        width: 100%; 
         background-color: var(--primarydarken); 
         z-index: 3;
+        position: relative;
+        box-shadow: var(--box-shadow4dp);
+    }
+    #sortcontainer {
+        float: right;
+        right: calc(-20vw + 40px);
+        width: calc(20vw - 80px);
+        background-color: var(--primarydarken);
+        height: 100%;
         position: relative;
         box-shadow: var(--box-shadow4dp);
     }
@@ -163,8 +289,14 @@
 {% block body %}
 <h1>Welkom, {{ user }}</h1>
 <p>Dit is jou eigen gebruikers pagina. Je kan hier snel navigeren naar een vaardigheid of snel een vaardigheid oefenen die je nog niet goed beheerst.</p>
+ <div id="sortcontainer">
+    <div style="box-shadow: var(--box-shadow2dp); position: relative; z-index: 4;"><h1 style="padding: 8px;">Klassen:</h1></div>
+    <form id="sortform"></form>
+</div>   
 <div class="onderwerpbigheader">
     <div style="box-shadow: var(--box-shadow2dp); position: relative; z-index: 4;"><h1 style="padding: 8px;">Onderwerpen:</h1></div>
 </div>
+
+    
 <div id="onderwerplijst" value="{{ soortvaardigheid }}"></div>
 {% endblock %}
