@@ -3,7 +3,6 @@
 {% block head %}
 <script>
     $(document).ready( ()=> {
-        ``
         
         $('#content').addClass('contentwelcome');
 
@@ -122,8 +121,6 @@
         var n = 0
         $('.fullletter').each( function() {
             
-            
-            
             if ($(this).parent().is(':visible')) {
                 var backgroundcolor = "var(--dmbglighten)";
                 
@@ -143,6 +140,9 @@
     
 </script>
 <style>
+    #gebruiker {
+        background-color: var(--primarydarken);
+    }
     .checkcontainer {
         display: block;
         position: relative;

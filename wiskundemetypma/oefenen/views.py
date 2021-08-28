@@ -175,17 +175,25 @@ def uitleg(request, letter, pk):
     uid = request.user.id
     user = User.objects.get(id=uid)
     o = Onderwerp.objects.get(letter=letter.upper())
-    v = Vaardigheid.objects.get(bijbehorend_onderwerp=o, nummer=pk)
+    v = Vaardigheid.objects.filter(bijbehorend_onderwerp=o)
 
+    vaardigheid = list()
+
+    for each in v:
+        vaardigheid.append(each.nummer)
+    
     # Haal de juiste uitleg uit de database
-    uitleg = Uitleg.objects.get(vaardigheid=v)
+    uitleg = Uitleg.objects.get(vaardigheid=v[pk-1])
+
+    vaardigheid = json.dumps(vaardigheid)
 
     # Stuur de data door naar de template
     return render(request, "oefenen/uitleg.html", {
         'uitleg':uitleg,
         'letter':letter,
         'pk':pk,
-        'onderwerp': o.naam
+        'onderwerp': o.naam,
+        'vaardigheid': vaardigheid
     })
 
 # Render het overzicht van een onderwerp + alle voortgang per vaardigheid

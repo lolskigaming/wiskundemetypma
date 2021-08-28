@@ -3,11 +3,71 @@
 {% block head %}
 <script>
     $(document).ready( ()=> {
-        var letter = $('#uitleg').attr('value')
+        var letter = $('#uitleg').attr('value');
         $('#backbutton').attr('href', `/oefenen/overzicht/${letter}`);
+
+        // Variabelen voor de heen en weer knoppen tussen vaardigheden
+        var vlijst = JSON.parse($('#uitleg').attr('name'));
+        var linknum = parseInt($('#uitleg').attr('name1'));
+        var previouslink = vlijst[vlijst.indexOf(linknum)-1]
+        var nextlink = vlijst[vlijst.indexOf(linknum)+1]
+
+        // Voeg beide knoppen toe met de juiste linkjes
+        $('#background').append(`
+            <div id="previous">
+                <a href="/oefenen/uitleg/${letter}/${previouslink}">
+                    <span id="previcon" class="material-icons">arrow_back_ios</span>
+                </a>
+            </div>
+        `);
+        $('#background').append(`
+            <div id="next">
+                <a href="/oefenen/uitleg/${letter}/${nextlink}">
+                    <span id="nexticon" class="material-icons">arrow_forward_ios</span>
+                </a>
+            </div>
+        `);
+
+        // Als er geen vaardigheid voor of na is, verstop de knop
+        if (previouslink === undefined) {
+            $('#previous').hide();
+        };
+        if (nextlink === undefined) {
+            $('#next').hide();
+        };
     });
 </script>
 <style>
+    #previous {
+        position: fixed;
+        top: 50%;
+        left: 10%;
+        z-index: 5;
+    }
+    #previcon {
+        color: var(--secondarylighten);
+        font-size: 120px;
+        transition: all 0.1s ease-in-out;
+    }
+    #previcon:hover {
+        font-size: 132px;
+        transform: translate(-6px,-6px);
+    }
+    #next {
+        position: fixed;
+        top: 50%;
+        right: 10%;
+        z-index: 5;
+    }
+    #nexticon {
+        color: var(--secondarylighten);
+        font-size: 120px;
+        transition: all 0.1s ease-in-out;
+    }
+    #nexticon:hover {
+        font-size:132px;
+        transform: translate(6px,-6px);
+    }
     #uitleg {
         margin: 60px 20% 20px 20%;
     }
@@ -73,7 +133,7 @@
 {% block body %}
 
 <!-- Render de uitleg op basis van de uitleg variabele van views.py -->
-<div id="uitleg" value="{{ letter }}">
+<div id="uitleg" value="{{ letter }}" name="{{ vaardigheid }}" name1="{{ pk }}">
     <div style="height: 100px;"></div>
     
     <div class="theoriebackground">

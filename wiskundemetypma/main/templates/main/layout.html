@@ -17,13 +17,6 @@
     </head>
     <script>
         $(document).ready(function() {
-
-            // Geef een kleurtje aan de juiste navbaritem
-            $('.navbaritem').each( function() {
-                if ($(this).html().toLowerCase() === window.location.pathname.replace('/', '')) {
-                    $(this).css('background', 'var(--primarydarken)');
-                }
-            });
             
             // Parallax effect
             $(document).scroll( ()=> {
@@ -38,14 +31,14 @@
 
             // Animatie van heen en weer gaan tussen pagina's
             $('.navbaritem').click( function(event) {
-                if (window.location.pathname.includes($(this).html()) === false) {
+                if (window.location.pathname.includes($(this).attr('id')) === false) {
                     $('#content').removeClass('contentwelcome');
                     $('#content').addClass('contentbegone');
                     
                     event.preventDefault();
                     
                     window.setTimeout( ()=> {
-                        var link = $(this).html();
+                        var link = $(this).attr('id');
                         window.location.href = "{% url 'blog' %}".replace(/blog/, link.toString().toLowerCase());
                     }, 500);
                 }
@@ -414,18 +407,18 @@
         <div id="backgroundimage"></div>
         <div style="height: 300px"></div>
         <div id="navbar">
-            <div class="navbaritem" >HOME</div>
-            <div class="navbaritem" >OVER</div>
-            <!--<div class="navbaritem" >BLOG</div> -->
+            <div id="home" class="navbaritem" >HOME</div>
+            <div id="over" class="navbaritem" >CONTACT</div>
+            <!--<div id="blog" class="navbaritem" >BLOG</div> -->
             {% if request.user.is_authenticated %}
-            <div class="navbaritem" >GEBRUIKER</div>
-            <!--<div class="navbaritem" >LEADERBOARD</div>-->
+            <div id="gebruiker" class="navbaritem" >OEFENEN</div>
+            <!--<div id="leaderboard" class="navbaritem" >LEADERBOARD</div>-->
             {% else %}
-            <div class="navbaritem" style="float: right;">REGISTREREN</div>
-            <div class="navbaritem" style="float: right;">INLOGGEN</div>
+            <div id="registreren" class="navbaritem" style="float: right;">REGISTREREN</div>
+            <div id="inloggen" class="navbaritem" style="float: right;">INLOGGEN</div>
             {% endif %}
             {% if request.user.is_authenticated %}
-            <div class="navbaritem" style="float: right;">UITLOGGEN</div>
+            <div id="uitloggen" class="navbaritem" style="float: right;">UITLOGGEN</div>
             {% endif %}
         </div>
         <div id="page">
