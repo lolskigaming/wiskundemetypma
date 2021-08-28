@@ -156,6 +156,128 @@
         .center {
             text-align: center;
         }
+
+        /* LEFT SIDE */
+        .contentbegoneleft {
+            -webkit-animation: contentbegoneleft 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: contentbegoneleft 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        }
+
+        @-webkit-keyframes contentbegoneleft {
+        0% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateX(-100%);
+                    transform: translateX(-100%);
+            opacity: 0;
+        }
+        }
+        @keyframes contentbegoneleft {
+        0% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateX(-100%);
+                    transform: translateX(-100%);
+            opacity: 0;
+        }
+        }
+
+        .contentwelcomeleft {
+            -webkit-animation: contentwelcomeleft 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: contentwelcomeleft 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+        }
+
+        @-webkit-keyframes contentwelcomeleft {
+        0% {
+            -webkit-transform: translateX(100%);
+                    transform: translateX(100%);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        }
+        @keyframes contentwelcomeleft {
+        0% {
+            -webkit-transform: translateX(100%);
+                    transform: translateX(100%);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        }
+
+        /* RIGHT SIDE */
+        .contentbegoneright {
+            -webkit-animation: contentbegoneright 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: contentbegoneright 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        }
+
+        @-webkit-keyframes contentbegoneright {
+        0% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateX(100%);
+                    transform: translateX(100%);
+            opacity: 0;
+        }
+        }
+        @keyframes contentbegoneright {
+        0% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateX(100%);
+                    transform: translateX(100%);
+            opacity: 0;
+        }
+        }
+
+        .contentwelcomeright {
+            -webkit-animation: contentwelcomeright 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: contentwelcomeright 0.5s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+        }
+
+        @-webkit-keyframes contentwelcomeright {
+        0% {
+            -webkit-transform: translateX(-100%);
+                    transform: translateX(-100%);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        }
+        @keyframes contentwelcomeright {
+        0% {
+            -webkit-transform: translateX(-100%);
+                    transform: translateX(-100%);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateX(0);
+                    transform: translateX(0);
+            opacity: 1;
+        }
+        }
     </style>
     <body>
         <div id="background">

@@ -3,6 +3,18 @@
 {% block head %}
 <script>
     $(document).ready( ()=> {
+        $('#blockbody').removeClass('contentbegoneleft contentbegoneright')
+        try {
+            if (window.history.state.animate === 'left') {
+                $('#blockbody').addClass('contentwelcomeleft');
+            } else if (window.history.state.animate === 'right') {
+                console.log('ey')
+                $('#blockbody').addClass('contentwelcomeright');
+            };
+        } catch (error) {
+            console.log('From other page')
+        };
+
         var letter = $('#uitleg').attr('value');
         $('#backbutton').attr('href', `/oefenen/overzicht/${letter}`);
 
@@ -15,16 +27,12 @@
         // Voeg beide knoppen toe met de juiste linkjes
         $('#background').append(`
             <div id="previous">
-                <a href="/oefenen/uitleg/${letter}/${previouslink}">
-                    <span id="previcon" class="material-icons">arrow_back_ios</span>
-                </a>
+                <span id="previcon" class="material-icons">arrow_back_ios</span>
             </div>
         `);
         $('#background').append(`
             <div id="next">
-                <a href="/oefenen/uitleg/${letter}/${nextlink}">
-                    <span id="nexticon" class="material-icons">arrow_forward_ios</span>
-                </a>
+                <span id="nexticon" class="material-icons">arrow_forward_ios</span>
             </div>
         `);
 
@@ -35,6 +43,36 @@
         if (nextlink === undefined) {
             $('#next').hide();
         };
+        try {
+            console.log(window.history.state.animate);
+        } catch (error) {
+            console.log("no states")
+        }
+            
+
+        $('#previous').click( function(event) {
+            $('#blockbody').removeClass('contentwelcomeleft contentwelcomeright')
+            $('#blockbody').addClass('contentbegoneright')
+
+            event.preventDefault();
+            
+            window.setTimeout( ()=> {
+                history.pushState({'animate': 'right'}, null, `/oefenen/uitleg/${letter}/${previouslink}`);
+                window.location.href = `/oefenen/uitleg/${letter}/${previouslink}`;
+            }, 500);
+        });
+
+        $('#next').click(function(event) {
+            $('#blockbody').removeClass('contentwelcomeleft contentwelcomeright')
+            $('#blockbody').addClass('contentbegoneleft')
+
+            event.preventDefault();
+
+            window.setTimeout( ()=> {
+                history.pushState({'animate': 'left'}, null, `/oefenen/uitleg/${letter}/${nextlink}`);
+                window.location.href = `/oefenen/uitleg/${letter}/${nextlink}`;
+            }, 500);
+        })
     });
 </script>
 <style>
