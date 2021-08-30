@@ -3,16 +3,22 @@
 {% block head %}
 <script>
     $(document).ready( ()=> {
-        $('#blockbody').removeClass('contentbegoneleft contentbegoneright')
+
+        $('#maintitle').html('{{ vaardigheidnaam }}')
+
+        $('#blockbody').removeClass();
         try {
             if (window.history.state.animate === 'left') {
                 $('#blockbody').addClass('contentwelcomeleft');
             } else if (window.history.state.animate === 'right') {
-                console.log('ey')
                 $('#blockbody').addClass('contentwelcomeright');
+            } else if (window.history.state.animate === 'down') {
+                $('#blockbody').addClass('slide-in-bck-center');
+            } else if (window.history.state.animate === 'up') {
+                $('#blockbody').addClass('slide-in-fwd-center');
             };
         } catch (error) {
-            console.log('From other page')
+            
         };
 
         var letter = $('#uitleg').attr('value');
@@ -63,8 +69,8 @@
         });
 
         $('#next').click(function(event) {
-            $('#blockbody').removeClass('contentwelcomeleft contentwelcomeright')
-            $('#blockbody').addClass('contentbegoneleft')
+            $('#blockbody').removeClass();
+            $('#blockbody').addClass('contentbegoneleft');
 
             event.preventDefault();
 
@@ -73,6 +79,29 @@
                 window.location.href = `/oefenen/uitleg/${letter}/${nextlink}`;
             }, 500);
         })
+
+        $('#backbutton').click( function(event) {
+            $('#blockbody').removeClass();
+            $('#blockbody').addClass('slide-out-fwd-center');
+            event.preventDefault();
+
+            window.setTimeout( ()=> {
+                history.pushState({'animate': 'up'}, null, `/oefenen/overzicht/${letter}`);
+                window.location.href = `/oefenen/overzicht/${letter}`;
+            }, 500);
+        });
+
+        $('#oefenknop').click( function(event) {
+            $('#blockbody').removeClass();
+            $('#blockbody').addClass('slide-out-bck-center');
+
+            event.preventDefault();
+
+            window.setTimeout( ()=> {
+                history.pushState({'animate': 'down'}, null, $('#oefenknop').attr('href'));
+                window.location.href = $('#oefenknop').attr('href');
+            }, 500);
+        });
     });
 </script>
 <style>
@@ -90,6 +119,7 @@
     #previcon:hover {
         font-size: 132px;
         transform: translate(-6px,-6px);
+        cursor: pointer;
     }
     #next {
         position: fixed;
@@ -105,6 +135,7 @@
     #nexticon:hover {
         font-size:132px;
         transform: translate(6px,-6px);
+        cursor: pointer;
     }
     #uitleg {
         margin: 60px 20% 20px 20%;

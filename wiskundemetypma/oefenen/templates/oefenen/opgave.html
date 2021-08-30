@@ -5,7 +5,23 @@
         
     $(document).ready(()=> {
 
-        // Slider logics
+        $('#maintitle').html('{{ vaardigheid }}')
+
+        $('#blockbody').removeClass();
+
+        if ($('#opgave').attr('name')) {
+            $('#blockbody').addClass('contentwelcomeleft');
+        };
+
+        try {
+            if (window.history.state.animate === 'down') {
+                $('#blockbody').addClass('slide-in-bck-center');
+            };
+        } catch (error) {
+            console.log('other page')
+        };
+
+        // Slider logica
         $('.slider').on('change', ()=> {
             var slider = $('.slider').val();
             var text = $('#slidertext');
@@ -69,7 +85,29 @@
         var letter = $('#letter').attr('value');
         var pk = $('#pk').attr('value');
 
-        $('#backbutton').attr('href', `/oefenen/uitleg/${letter}/${pk}`);
+        $('#backbutton').click( function(event) {
+            $('#blockbody').removeClass();
+            $('#blockbody').addClass('slide-out-fwd-center');
+            event.preventDefault();
+
+            window.setTimeout( ()=> {
+                history.pushState({'animate': 'up'}, null, `/oefenen/uitleg/${letter}/${pk}`);
+                window.location.href = `/oefenen/uitleg/${letter}/${pk}`;
+            }, 500);
+        });
+
+        $('#submitbutton').click( function(event) {
+            $('#blockbody').removeClass();
+            $('#blockbody').addClass('contentbegoneleft');
+
+            event.preventDefault();
+
+            window.setTimeout( ()=> {
+                history.pushState({'animate': 'left'}, null, window.location.href);
+                $('#score').submit();
+            },500);
+        });
+        
     });
     </script>
     <style>
@@ -142,6 +180,7 @@
         }
         #submitbutton:hover {
             box-shadow: var(--box-shadow2dp);
+            cursor: pointer;
         }
 
         .slider {
@@ -228,13 +267,17 @@
         #opgavetext > p {
             margin: 16px 0 16px 0;
         }
+
+        #hoverable:hover {
+            cursor: pointer;
+        }
     </style>
 {% endblock %}
 {% block body %}
     <!-- Print de opdracht en evt. het plaatje erbij -->
 <div style="height: 100px;"></div>
 
-<div id="opgave" value="{{ voortgang }}">
+<div id="opgave" value="{{ voortgang }}" name="{{ animate }}">
     <div class="opgaveribbon">LOS OP</div>
     <div class="opgavetext" id="opgavetext">{{ o.opdracht|safe }}
         {% if opdracht.plaatje %}
@@ -242,11 +285,11 @@
         {% endif %}
     </div>
 
-    <div class="opgaveribbon">NAKIJKEN</div>
+    <div class="opgaveribbon" id="hoverable">NAKIJKEN</div>
     <div id="nakijken">
         <div class="opgavetext">{{ o.uitwerking|safe }}</div>
         <hr class="solid">
-        <form method="post" id=score action="{% url 'volgende' %}">    
+        <form method="post" id="score" action="{% url 'volgende' %}">    
             {% csrf_token %}
             <input type="hidden" id="letter" name="letter" value="{{ letter }}">
             <input type="hidden" id="pk" name="pk" value="{{ pk }}">
@@ -260,7 +303,7 @@
             </div>
         </form>
     </div>
-    <div class="opgaveribbon">UITLEG</div>
+    <div class="opgaveribbon" id="hoverable">UITLEG</div>
     <div id="uitleg">
         <p class="subheader">Theorie:</p>
         <div class="opgavetext">{{ u.uitleg|safe }}</div>

@@ -3,6 +3,16 @@
 {% block head %}
     <script>
         $(document).ready( ()=> {
+
+            $('#blockbody').removeClass();
+            try {
+                if (window.history.state.animate === 'up') {
+                    $('#blockbody').addClass('slide-in-fwd-center');
+                }
+            } catch (error) {
+
+            };
+
             var lijst = JSON.parse($('#overzicht').attr('value'));
             var letter = $('#listcontainer').attr('value');
             var gemiddeldevoortgang = 0.0;
@@ -17,7 +27,7 @@
                 $('#listcontainer').append(`
                     <div class="row" style="background-color: ${backgroundcolor}; z-index: 1;">
                         
-                        <a href="/oefenen/uitleg/${letter}/${lijst[v][1]}"><p class="vaardigheid rowitem">${lijst[v][0]}</p></a>
+                        <a class="uitleglink" href="/oefenen/uitleg/${letter}/${lijst[v][1]}"><p class="vaardigheid rowitem">${lijst[v][0]}</p></a>
                         <div class="progressbarbackground"><div class="progressbar" style="width: ${lijst[v][2] * 100}px"></div></div>
                         <p class="progress">${Math.round(lijst[v][2] * 100)}%</p>
                     </div>
@@ -39,6 +49,18 @@
                 <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
                 </div>
             `);
+
+            $('.uitleglink').click( function(event) {
+                var link = $(this).attr('href');
+                $('#blockbody').removeClass();
+                $('#blockbody').addClass('slide-out-bck-center');
+                event.preventDefault();
+
+                window.setTimeout( ()=> {
+                    history.pushState({'animate' : 'down'}, null, link)
+                    window.location.href = link;
+                }, 500);
+            });
         });
     </script>
     <style>

@@ -99,7 +99,9 @@ def oefenen(request, letter, pk):
         'pk':pk,
         'u':u,
         'voortgang': g.voortgang,
-        'onderwerp': o.naam
+        'onderwerp': o.naam,
+        'vaardigheid': v.naam,
+        'animate': True
     })
 
 # Bepaal de volgende opdracht
@@ -165,7 +167,7 @@ def volgende(request):
     
     # Komt de gebruiker met een GET-method, dan is er iets fout gegaan
     return render(request, "oefenen/volgende.html", {
-            "score":"huh"
+            "score":"huh",
         })
 
 # Render de uitleg pagina voor de juiste vaardigheid
@@ -193,7 +195,8 @@ def uitleg(request, letter, pk):
         'letter':letter,
         'pk':pk,
         'onderwerp': o.naam,
-        'vaardigheid': vaardigheid
+        'vaardigheid': vaardigheid,
+        'vaardigheidnaam': v[pk-1].naam,
     })
 
 # Render het overzicht van een onderwerp + alle voortgang per vaardigheid

@@ -152,6 +152,7 @@
             position: fixed;
             overflow-y: scroll;
             display: inline-block;
+            -webkit-perspective: 1000;
         }
         .center {
             text-align: center;
@@ -278,12 +279,136 @@
             opacity: 1;
         }
         }
+
+        /* hierarchy down entrance */
+        .slide-in-bck-center {
+            -webkit-animation: slide-in-bck-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                    animation: slide-in-bck-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        }
+
+        @-webkit-keyframes slide-in-bck-center {
+        0% {
+            -webkit-transform: translateZ(600px);
+                    transform: translateZ(600px);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateZ(0);
+                    transform: translateZ(0);
+            opacity: 1;
+        }
+        }
+        @keyframes slide-in-bck-center {
+        0% {
+            -webkit-transform: translateZ(600px);
+                    transform: translateZ(600px);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateZ(0);
+                    transform: translateZ(0);
+            opacity: 1;
+        }
+        }
+
+        /* hierarchy up entrance */
+        .slide-in-fwd-center {
+            -webkit-animation: slide-in-fwd-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+                    animation: slide-in-fwd-center 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        }
+
+        @-webkit-keyframes slide-in-fwd-center {
+        0% {
+            -webkit-transform: translateZ(-1400px);
+                    transform: translateZ(-1400px);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateZ(0);
+                    transform: translateZ(0);
+            opacity: 1;
+        }
+        }
+        @keyframes slide-in-fwd-center {
+        0% {
+            -webkit-transform: translateZ(-1400px);
+                    transform: translateZ(-1400px);
+            opacity: 0;
+        }
+        100% {
+            -webkit-transform: translateZ(0);
+                    transform: translateZ(0);
+            opacity: 1;
+        }
+        }
+
+        /* hierarchy down exit */
+        .slide-out-bck-center {
+            -webkit-animation: slide-out-bck-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+                    animation: slide-out-bck-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+        }
+
+        @-webkit-keyframes slide-out-bck-center {
+        0% {
+            -webkit-transform: translateZ(0);
+                    transform: translateZ(0);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateZ(-1100px);
+                    transform: translateZ(-1100px);
+            opacity: 0;
+        }
+        }
+        @keyframes slide-out-bck-center {
+        0% {
+            -webkit-transform: translateZ(0);
+                    transform: translateZ(0);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateZ(-1100px);
+                    transform: translateZ(-1100px);
+            opacity: 0;
+        }
+        }
+
+        /* hierarchy up exit */
+        .slide-out-fwd-center {
+            -webkit-animation: slide-out-fwd-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+                    animation: slide-out-fwd-center 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+        }
+
+        @-webkit-keyframes slide-out-fwd-center {
+        0% {
+            -webkit-transform: translateZ(1);
+                    transform: translateZ(1);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateZ(600px);
+                    transform: translateZ(600px);
+            opacity: 0;
+        }
+        }
+        @keyframes slide-out-fwd-center {
+        0% {
+            -webkit-transform: translateZ(1);
+                    transform: translateZ(1);
+            opacity: 1;
+        }
+        100% {
+            -webkit-transform: translateZ(600px);
+                    transform: translateZ(600px);
+            opacity: 0;
+        }
+        }
     </style>
     <body>
         <div id="background">
             <div id="ribbon">
                 <a id="backbutton" href="/gebruiker"><i class="material-icons-outlined" style="float: left; margin: 6px 0 8px 0;">arrow_back</i><p class="backbuttontext">TERUG</p></a>
-                <h1>{{ onderwerp }}</h1>
+                <h1 id="maintitle">{{ onderwerp }}</h1>
             </div>
             <div id="blockbody">
             {% block body %}
