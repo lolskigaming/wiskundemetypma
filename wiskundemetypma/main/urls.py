@@ -10,5 +10,6 @@ urlpatterns = [
     path("leaderboard", views.leaderboard, name="leaderboard"),
     path("home", views.index, name="index"),
     path("uitloggen", views.uitloggen, name="uitloggen"),
-    path("gebruiker", views.gebruiker, name="gebruiker")
+    path("gebruiker", views.gebruiker, name="gebruiker"),
+    #path("password_reset", views.password_reset_request, name="password_reset")
 ]

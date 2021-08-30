@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.deletion import PROTECT
 from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib import admin
 
 # Create your models here.
@@ -41,13 +42,13 @@ class Vaardigheid(models.Model):
 # Dit slaat een opdracht op, zoals "Los op. 3x = 6", met een
 class Opgave(models.Model):
     # opgave
-    opgave = RichTextField()
+    opgave = RichTextUploadingField()
     # evt. een plaatje
     plaatje = models.ImageField(blank=True, null=True, upload_to='images/')
     # link naar de vaardigheid waar hij bij hoort
     vaardigheid = models.ForeignKey(Vaardigheid, on_delete=models.PROTECT)
     # uitwerking
-    uitwerking = RichTextField()
+    uitwerking = RichTextUploadingField()
 
     def __str__(self):
         return "Opgave bij " + self.vaardigheid.naam + " - " + str(self.pk)
@@ -80,7 +81,7 @@ class OpdrachtVoortgang(models.Model):
 
 class Uitleg(models.Model):
     vaardigheid = models.OneToOneField(Vaardigheid, on_delete=models.PROTECT)
-    uitleg = RichTextField()
+    uitleg = RichTextUploadingField()
     voorbeeld = RichTextField(null=True, blank=True)
 
     def __str__(self):
@@ -89,5 +90,4 @@ class Uitleg(models.Model):
 class Tijdsfactor(models.Model):
     laatste_keer = models.DateField()
     intensiteit = models.IntegerField(default=100)
-
 

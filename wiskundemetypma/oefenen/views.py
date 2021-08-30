@@ -104,12 +104,37 @@ def oefenen(request, letter, pk):
         'animate': True
     })
 
+def verander_voortgang(voortgang, verandering, max = None):
+    nieuwe_voortgang = voortgang.voortgang + verandering
+
+    if nieuwe_voortgang < 0:
+        nieuwe_voortgang = 0
+    elif nieuwe_voortgang > 100 and voortgang.voortgang < 101:
+        nieuwe_voortgang = 100
+    elif nieuwe_voortgang > 125 and voortgang.voortgang < 126:
+        nieuwe_voortgang = 125
+    elif nieuwe_voortgang > 150 and voortgang.voortgang < 151:
+        nieuwe_voortgang = 150
+    elif nieuwe_voortgang > 175 and voortgang.voortgang < 176:
+        nieuwe_voortgang = 175
+    elif nieuwe_voortgang > 200:
+        nieuwe_voortgang = 200
+
+    if max:
+        if nieuwe_voortgang > max:
+            nieuwe_voortgang = max
+
+    return nieuwe_voortgang    
+
 # Bepaal de volgende opdracht
 def volgende(request):
     # Als er nagekeken is...
     if request.method == "POST":
         # sla wat data op
         score = float(request.POST["score"])
+        if score not in range(-2, 3):
+            raise ValueError
+
         o = Onderwerp.objects.get(letter=request.POST["letter"].upper())
         v = Vaardigheid.objects.get(bijbehorend_onderwerp=o, nummer=request.POST["pk"])
         user = User.objects.get(id=request.user.id)
@@ -128,38 +153,28 @@ def volgende(request):
 
         # Pas de voortgang van deze vaardigheid aan
         vo = Voortgang.objects.get(user=user, vaardigheid=v)
-        nieuwe_voortgang = float(vo.voortgang) + (score / float(g.intensiteit))
-        if nieuwe_voortgang > 1.5:
-            nieuwe_voortgang = 1.5
-        elif nieuwe_voortgang < -0.5:
-            nieuwe_voortgang = -0.5
+        huidig = vo.voortgang
+        if score == -2:
+            vo.voortgang = verander_voortgang(vo, -25)
+        elif score == -1:
+            if huidig <= 100:
+                vo.voortgang = verander_voortgang(vo, -10)
+            else:
+                vo.voortgang = verander_voortgang(vo, -25)
+        elif score == 0:
+            pass
+        elif score == 1:
+            if huidig <= 90:
+                vo.voortgang = verander_voortgang(vo, 10, 90)
+        elif score == 2:
+            if huidig <= 100:
+                vo.voortgang = verander_voortgang(vo, 25)
+            else:
+                vo.voortgang = verander_voortgang(vo, 24)
 
-        # Sla dat op
-        vo.voortgang = nieuwe_voortgang
+         # Sla dat op
         vo.save()
 
-        # Als de gebruiker de vaardigheid beheerst
-        if nieuwe_voortgang >= 0.995:
-            # Stuur hem door naar het keuzemenu voor de volgende vaardigheid
-            aantalvaardigheden = len(Voortgang.objects.filter(user=user, voortgang__gte=0.9))
-            totaal = len(Vaardigheid.objects.all())-1 # (null vaardigheid telt niet mee)
-            score = aantalvaardigheden / totaal * 100
-            print(f'score = {aantalvaardigheden} / {totaal} = {score}')
-            
-            g.score = score
-            g.save()
-
-            return render(request, "oefenen/volgende.html", {
-                "v":v.volgende.all()
-            })
-        # Als de gebruiker teveel fout heeft
-        if nieuwe_voortgang <= -0.5:
-            # Doe voor nu niks, maar later wordt dit een redirect naar de uitleg
-            return HttpResponseRedirect(reverse('uitleg', kwargs={
-                'letter':v.bijbehorend_onderwerp.letter,
-                'pk':v.nummer
-            }))
-        # Moet hij dezelfde vaardigheid blijven oefenen, herlaad de pagina
         return HttpResponseRedirect(reverse('oefenen', kwargs={
                 'letter':v.bijbehorend_onderwerp.letter,
                 'pk':v.nummer
@@ -177,7 +192,7 @@ def uitleg(request, letter, pk):
     uid = request.user.id
     user = User.objects.get(id=uid)
     o = Onderwerp.objects.get(letter=letter.upper())
-    v = Vaardigheid.objects.filter(bijbehorend_onderwerp=o)
+    v = Vaardigheid.objects.get(bijbehorend_onderwerp=o, nummer=pk)
 
     vaardigheid = list()
 
@@ -247,24 +262,14 @@ def tijdsfactor():
     if delta <= 0:
         return
     
-    # Bereken waarmee we de delta moeten vermenigvuldigen
-    procent_per_dag = float(100 / factor.intensiteit)
-    intensiteit = procent_per_dag / 100
-
     # Haal alle voortgang uit de database op
     alles = Voortgang.objects.all()
 
     # Haal er voor elke voortgang 1 procent af (per dag)
     for elke in alles:
         # Als het percentage 0 of lager is, doe niks
-        if elke.voortgang > 0:
-            nieuw = elke.voortgang - (delta * intensiteit)
-            if nieuw >= 0:
-                elke.voortgang = nieuw
-                elke.save()
-                continue
-            # Als de nieuwe voortgang kleiner is dan 0, maak er gewoon 0 van
-            elke.voortgang = 0
+        if elke.voortgang in [100, 125, 150, 175]:
+            elke.voortgang += 1
             elke.save()
 
     # Sla op dat we vandaag deze functie runden
