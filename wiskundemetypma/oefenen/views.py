@@ -192,7 +192,7 @@ def uitleg(request, letter, pk):
     uid = request.user.id
     user = User.objects.get(id=uid)
     o = Onderwerp.objects.get(letter=letter.upper())
-    v = Vaardigheid.objects.get(bijbehorend_onderwerp=o, nummer=pk)
+    v = Vaardigheid.objects.filter(bijbehorend_onderwerp=o)
 
     vaardigheid = list()
 

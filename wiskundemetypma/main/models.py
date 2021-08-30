@@ -7,7 +7,6 @@ from django import forms
 
 class myUserCreationForm(forms.Form):
     username = forms.CharField(label='Gebruikersnaam', min_length=4, max_length=64)
-    pk = forms.CharField(label='Leerlingnummer', min_length=6, max_length=6) # MISSCHIEN DOEN WE DIT IDK MOET MET YPMA OVERLEGD WORDEN
     email = forms.EmailField(label='Emailadres')
     password1 = forms.CharField(label='Wachtwoord', widget=forms.PasswordInput)
     password2 = forms.CharField(label='Wachtwoord opnieuw', widget=forms.PasswordInput)
@@ -18,10 +17,6 @@ class myUserCreationForm(forms.Form):
         if r.count():
             raise ValidationError("die gebruikersnaam bestaat al")
         return username
-
-    def clean_leerlingnummer(self):
-        pk = self.cleaned_data['pk']
-        return pk
 
 
     def clean_email(self):
@@ -44,6 +39,6 @@ class myUserCreationForm(forms.Form):
     def save(self, commit=True):
         user = User.objects.create_user(
             self.cleaned_data['username'],
-            self.cleaned_data['pk'],
+            self.cleaned_data['email'],
             self.cleaned_data['password1']
         )
