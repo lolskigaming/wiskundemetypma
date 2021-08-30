@@ -192,7 +192,7 @@ def uitleg(request, letter, pk):
     uid = request.user.id
     user = User.objects.get(id=uid)
     o = Onderwerp.objects.get(letter=letter.upper())
-    v = Vaardigheid.objects.get(bijbehorend_onderwerp=o, nummer=pk)
+    v = Vaardigheid.objects.filter(bijbehorend_onderwerp=o)
 
     vaardigheid = list()
 
@@ -231,8 +231,8 @@ def overzicht(request, letter):
             if voortg.voortgang < 0:
                 vaardigheid.append([each.naam, each.nummer, 0])
                 continue
-            if voortg.voortgang >= 0.995:
-                vaardigheid.append([each.naam, each.nummer, 1])
+            if voortg.voortgang >= 200:
+                vaardigheid.append([each.naam, each.nummer, 200])
                 continue
             vaardigheid.append([each.naam, each.nummer, voortg.voortgang])
         except:

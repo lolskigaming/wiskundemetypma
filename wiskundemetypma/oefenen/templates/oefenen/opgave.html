@@ -59,23 +59,20 @@
         });
 
         // Rond de percentages af
-        var percentage = Math.round($('#opgave').attr('value') * 100);
+        var percentage = Math.round($('#opgave').attr('value'));
         if (isNaN(percentage)){
             percentage = 0.0
         };
 
-        // Percentages moeten niet boven 100 of onder 0 kunnen gaan
-        if (percentage > 100) {
-            percentage = 100;
-        } else if (percentage < 0) {
-            percentage = 0;
-        };
+        
 
         // Toevoeging van het percentagebalkje in het titelscherm
         $('#ribbon').append(`
             <div style="position: absolute; margin: 20px 0 20px 0; right: 0px; top: 0px;">
                 <div class="progressbarbackground"  style="margin-top: 18px; margin-bottom: 18px;">
-                    <div class="progressbar"  style="background-color: var(--primarylighten);width: ${percentage}px;"></div>
+                    <div class="progressbar"  style="background-color: var(--secondarylighten);width: ${Math.min(100, percentage)}px;">
+                        <div class="progressbar" style="background-color: var(--secondary); width: ${Math.min(100, Math.max(0, percentage - 100))}px;"></div>
+                    </div>
                 </div>
                 <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
             </div>
@@ -294,7 +291,7 @@
             <input type="hidden" id="letter" name="letter" value="{{ letter }}">
             <input type="hidden" id="pk" name="pk" value="{{ pk }}">
             <input type="hidden" id="opdracht" name="opdracht" value="{{ opdracht.opgave }}">
-            <input type="hidden" name="score" value="0.25">
+            <input type="hidden" name="score" value="0">
             <div id="slidecontainer">
                 <input type="range" min="-2" max="2" value="0" class="slider" id="myrange">
                 <p id="slidertext">Voor de helft goed.</p>
