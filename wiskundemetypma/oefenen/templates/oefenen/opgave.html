@@ -19,19 +19,19 @@
                 var value = $('input[name="score"]')
                 if (slider == -2) {
                     text.html('Helemaal fout.');
-                    value.val("-1.0");
+                    value.val("-2");
                 } else if (slider == -1) {
                     text.html('Bijna helemaal fout.');
-                    value.val("-0.5");
+                    value.val("-1");
                 } else if (slider == 0) {
                     text.html('Voor de helft goed.');
-                    value.val("0.25");
+                    value.val("0");
                 } else if (slider == 1) {
                     text.html('Goed op rekenfout na.');
-                    value.val("0.75");
+                    value.val("1");
                 } else {
                     text.html('Helemaal goed');
-                    value.val("1.0");
+                    value.val("2");
                 };
             });
 
@@ -378,7 +378,7 @@
                 <input type="hidden" id="letter" name="letter" value="{{ letter }}">
                 <input type="hidden" id="pk" name="pk" value="{{ pk }}">
                 <input type="hidden" id="opdracht" name="opdracht" value="{{ opdracht.opgave }}">
-                <input type="hidden" name="score" value="0.25">
+                <input type="hidden" name="score" value="0">
                 <div id="slidecontainer">
                     <input type="range" min="-2" max="2" value="0" class="slider" id="myrange">
                     <p id="slidertext">Voor de helft goed.</p>

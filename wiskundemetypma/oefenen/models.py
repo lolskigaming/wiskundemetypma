@@ -91,4 +91,3 @@ class Tijdsfactor(models.Model):
     laatste_keer = models.DateField()
     intensiteit = models.IntegerField(default=100)
 
-

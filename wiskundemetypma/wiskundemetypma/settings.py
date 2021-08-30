@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-zir)(&mxyuu-t%4^tkl%$s+6wdj73bperdly-jn^$7e^n)9jb@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -156,3 +156,10 @@ CKEDITOR_CONFIGS = {
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'help.wvy@gmail.com'
+EMAIL_HOST_PASSWORD = 'uqbckohjpgkceygh'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'WiskundeVanYpma Support <noreply@wiskundevanypma.nl>'
