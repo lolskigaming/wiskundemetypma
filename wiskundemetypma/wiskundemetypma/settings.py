@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'oefenen',
     'ckeditor',
     'mathfilters',
-    'modelclone'
+    'wiskundemetypma'
 ]
 
 MIDDLEWARE = [
