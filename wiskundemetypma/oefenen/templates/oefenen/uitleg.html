@@ -102,14 +102,58 @@
                 window.location.href = $('#oefenknop').attr('href');
             }, 500);
         });
+
+        $('img').click( function() {
+            var link = $(this).attr('src');
+            $('#modal').css({'display': 'block'});
+            $('#modal').html(`
+                <img src="${link}">
+            `);
+            $('#modal > img').addClass('expandimg');
+        });
+
+        $('#modal').click( function() {
+            $(this).css({'display': 'none'});
+        });
     });
 </script>
 <style>
+    #modal {
+        position: fixed;
+        top: 0px;
+        height: 100vh;
+        width: 100vw;
+        -webkit-perspective: 1000;
+        display: none;
+        z-index: 10;
+        background-color: rgb(0,0,0,0.5);
+    }
+
+    #modal > img {
+        position: absolute;
+        width: 80%;
+        margin: 10%;
+        z-index: 10;
+    }
+
+    .expandimg {
+        animation: expandimg 0.5s cubic-bezier(.38,.2,.51,.96);
+        
+    }
+
+    @keyframes expandimg {
+    0% {
+        transform:scale(0);
+    } 100% {
+        transform: scale(1);
+    }
+    }
+
     #previous {
         position: fixed;
         top: 50%;
         left: 10%;
-        z-index: 5;
+        z-index: 1;
     }
     #previcon {
         color: var(--secondarylighten);
@@ -125,7 +169,7 @@
         position: fixed;
         top: 50%;
         right: 10%;
-        z-index: 5;
+        z-index: 1;
     }
     #nexticon {
         color: var(--secondarylighten);
@@ -216,6 +260,7 @@
     </div>
 </div>
 <a id="oefenknop" href="/oefenen/{{ letter }}/{{ pk }}"><p id="oefenknoptext">OEFEN!</p></a>
+
 
 {% endblock %}
 

@@ -16,7 +16,7 @@
             var lijst = JSON.parse($('#overzicht').attr('value'));
             var letter = $('#listcontainer').attr('value');
             var gemiddeldevoortgang = 0.0;
-            console.log(lijst)
+
             for (var v = 0; !(lijst[v] === undefined); v++) {
 
                 var backgroundcolor = "var(--dmbglighten)";
@@ -24,27 +24,32 @@
                     backgroundcolor = "#cacbcd"
                 }
 
+
                 $('#listcontainer').append(`
                     <div class="row" style="background-color: ${backgroundcolor}; z-index: 1;">
                         
                         <a class="uitleglink" href="/oefenen/uitleg/${letter}/${lijst[v][1]}"><p class="vaardigheid rowitem">${lijst[v][0]}</p></a>
-                        <div class="progressbarbackground"><div class="progressbar" style="width: ${lijst[v][2] * 100}px"></div></div>
-                        <p class="progress">${Math.round(lijst[v][2] * 100)}%</p>
+                        <div class="progressbarbackground">
+                            <div class="progressbar" style="width: ${Math.min(lijst[v][2], 100)}px">
+                                <div class="progressbar" style="background-color: var(--secondary); width: ${Math.min(100, Math.max(0, lijst[v][2] - 100))}px;"></div>
+                            </div>
+                        </div>
+                        <p class="progress">${Math.min(lijst[v][2], 200)}%</p>
                     </div>
                 `)
 
                 gemiddeldevoortgang += lijst[v][2]
             };
 
-            var percentage = Math.round(gemiddeldevoortgang / Object.keys(lijst).length * 100);
+            var percentage = Math.round(gemiddeldevoortgang / Object.keys(lijst).length / 2);
             if (isNaN(percentage)){
-                percentage = 0.0
+                percentage = 0
             };
 
             $('#listtitle').append(`
                 <div >
                 <div class="progressbarbackground"  style="margin-top: 18px; margin-bottom: 18px;">
-                    <div class="progressbar"  style="background-color: var(--primarylighten);width: ${gemiddeldevoortgang / Object.keys(lijst).length * 100}px;"></div>
+                    <div class="progressbar"  style="background-color: var(--primarylighten);width: ${percentage}px;"></div>
                 </div>
                 <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
                 </div>

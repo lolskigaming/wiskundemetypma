@@ -231,8 +231,8 @@ def overzicht(request, letter):
             if voortg.voortgang < 0:
                 vaardigheid.append([each.naam, each.nummer, 0])
                 continue
-            if voortg.voortgang >= 0.995:
-                vaardigheid.append([each.naam, each.nummer, 1])
+            if voortg.voortgang >= 200:
+                vaardigheid.append([each.naam, each.nummer, 200])
                 continue
             vaardigheid.append([each.naam, each.nummer, voortg.voortgang])
         except:
