@@ -52,16 +52,14 @@ def registreren(request):
                 gebruiker = Gebruiker(user=User.objects.get(id=request.user.id))
                 gebruiker.save()
                 print(gebruiker)
-                return render(request, 'main/gebruiker.html',{
-                    "message": "je bent nu geregistreerd!",
-                    "status": 1
-                })
+                request.session['message'] = "Je bent nu geregistreerd!"
+                request.session['status'] = 1
+                return HttpResponseRedirect(reverse('gebruiker'))
 
-            
-            return render(request, 'main/gebruiker.html',{
-                "message": "Je bent nu geregistreerd! Maar er is wel iets misgegaan met het inloggen, probeer opnieuw in te loggen.",
-                "status": 0
-            })
+            request.session['message'] = "Je bent nu geregistreerd! Maar er is wel iets misgegaan met het inloggen, probeer opnieuw in te loggen."
+            request.session['status'] = 0
+            return HttpResponseRedirect(reverse('gebruiker'))
+
         else:
             return render(request, 'main/registreren.html', {
                 'form':form,
@@ -69,6 +67,7 @@ def registreren(request):
                 "message": "er is iets mis gegaan met het registreren, probeer het opnieuw.",
                 "status": -1
             })
+            
     else:
         form = myUserCreationForm()
     return render(request, 'main/registreren.html', {
