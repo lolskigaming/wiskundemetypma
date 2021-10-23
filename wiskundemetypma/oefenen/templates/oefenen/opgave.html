@@ -50,7 +50,7 @@
             if (content.is(':visible')) {
                 content.animate({'height': '0px'}, 100, function(){ content.hide()});
             } else {
-                content.css({height : 'auto'});
+                content.css({height : 'fit-content', display: 'block'});
                 var height = content.height();
                 content.show();
                 content.css({height: '0px'})
@@ -152,6 +152,7 @@
         }
         #uitleg {
             font-size: 20px;
+            height: fit-content;
         }
         #slidecontainer {
             width: 100%;
