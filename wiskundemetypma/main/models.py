@@ -12,7 +12,7 @@ class myUserCreationForm(forms.Form):
     password2 = forms.CharField(label='Wachtwoord opnieuw', widget=forms.PasswordInput)
 
     def clean_username(self):
-        username = self.cleaned_data['username'].lower()
+        username = self.cleaned_data['username']
         r = User.objects.filter(username=username)
         if r.count():
             raise ValidationError("die gebruikersnaam bestaat al")

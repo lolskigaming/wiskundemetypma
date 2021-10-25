@@ -1,0 +1,275 @@
+{% extends 'oefenen/layout.html' %}
+
+{% block head %}
+<script>
+        
+    $(document).ready(()=> {
+
+        $('#maintitle').html('{{ vaardigheid }}')
+
+        $('#blockbody').removeClass();
+
+        if ($('#opgave').attr('name')) {
+            $('#blockbody').addClass('contentwelcomeleft');
+        };
+
+        try {
+            if (window.history.state.animate === 'down') {
+                $('#blockbody').addClass('slide-in-bck-center');
+            };
+        } catch (error) {
+            console.log('other page')
+        };
+
+        // Slider logica
+        $('.slider').on('change', ()=> {
+            var slider = $('.slider').val();
+            var text = $('#slidertext');
+            var value = $('input[name="score"]')
+            if (slider == -2) {
+                text.html('Helemaal fout.');
+                value.val("-2");
+            } else if (slider == -1) {
+                text.html('Bijna helemaal fout.');
+                value.val("-1");
+            } else if (slider == 0) {
+                text.html('Voor de helft goed.');
+                value.val("0");
+            } else if (slider == 1) {
+                text.html('Goed op rekenfout na.');
+                value.val("1");
+            } else {
+                text.html('Helemaal goed');
+                value.val("2");
+            };
+        });
+
+        // Animatie van het uitschuiven van de opdracht tabjes
+        $('.opgaveribbon').click( function() {
+            var content = $(`#${$(this).html().toLowerCase()}`);
+            if (content.is(':visible')) {
+                content.animate({'height': '0px'}, 100, function(){ content.hide()});
+            } else {
+                content.css({height : 'auto'});
+                var height = content.height();
+                content.show();
+                content.css({height: '0px'})
+                content.animate({'height': height}, 200);
+            };
+        });
+
+        // Rond de percentages af
+        var percentage = Math.round($('#opgave').attr('value'));
+        if (isNaN(percentage)){
+            percentage = 0.0
+        };
+
+        
+
+        // Toevoeging van het percentagebalkje in het titelscherm
+        $('#ribbon').append(`
+            <div style="position: absolute; margin: 20px 0 20px 0; right: 0px; top: 0px;">
+                <div class="progressbarbackground"  style="margin-top: 18px; margin-bottom: 18px;">
+                    <div class="progressbar"  style="background-color: var(--secondarylighten);width: ${Math.min(100, percentage)}px;">
+                        <div class="progressbar" style="background-color: var(--secondary); width: ${Math.min(100, Math.max(0, percentage - 100))}px;"></div>
+                    </div>
+                </div>
+                <p class="progress" style="line-height: 60px; color: var(--whitetext);">${percentage}%</p>
+            </div>
+        `);
+        
+        // Logica van de terugknop
+        var letter = $('#letter').attr('value');
+        var pk = $('#pk').attr('value');
+
+        $('#backbutton').click( function(event) {
+            $('#blockbody').removeClass();
+            $('#blockbody').addClass('slide-out-fwd-center');
+            event.preventDefault();
+
+            window.setTimeout( ()=> {
+                history.pushState({'animate': 'up'}, null, `/oefenen/uitleg/${letter}/${pk}`);
+                window.location.href = `/oefenen/uitleg/${letter}/${pk}`;
+            }, 500);
+        });
+
+        $('#submitbutton').click( function(event) {
+            $('#blockbody').removeClass();
+            $('#blockbody').addClass('contentbegoneleft');
+
+            event.preventDefault();
+
+            window.setTimeout( ()=> {
+                history.pushState({'animate': 'left'}, null, window.location.href);
+                $('#score').submit();
+            },500);
+        });
+        
+    });
+    </script>
+    <style>
+        #nakijken {
+            display: none;
+            height: 0px;
+        }
+        #uitleg {
+            display: none;
+            padding-bottom: 48px;
+        }
+        #afbeelding {
+            width:300px;
+            height:300px;
+            box-shadow: var(--box-shadow2dp);
+        }
+        #opgave {
+            margin-left: 20%;
+            margin-right: 20%;
+            margin-top: 60px;
+            min-height: 200px;
+            height: fit-content;
+            background-color: var(--dmbglighten);
+            box-shadow: var(--box-shadow2dp);
+        }
+
+        .opgaveribbon {
+            background-color: var(--primary);
+            height: 48px;
+            padding-left: 16px;
+            font-family: inter;
+            line-height: 48px;
+            font-size: 28px;
+            color: var(--whitetext);
+            box-shadow: var(--box-shadow2dp);
+        }
+        .opgavetext {
+            font-size: 20px;
+            padding-left: 16px;
+            color: rgb(0,0,0,0.8)
+        }
+        #nakijken {
+            font-size: 20px;
+            display: none;
+        }
+        #uitleg {
+            font-size: 20px;
+        }
+        #slidecontainer {
+            width: 100%;
+            position: relative;
+            height: 40px;
+            top: 4px;
+        }
+        #submitbutton {
+            display: inline-block;
+            left: 50%;
+            bottom: 4px;
+            height: 32px;
+            width: 120px;
+            margin: 4px;
+            float: right;
+            border: none;
+            border-radius: 0px;
+            background-color: var(--primarydarken);
+            color: var(--whitetext);
+            font-family: yantramanav;
+            font-size: 16px;
+            transition: box-shadow 0.2s ease-in-out;
+        }
+        #submitbutton:hover {
+            box-shadow: var(--box-shadow2dp);
+            cursor: pointer;
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 20px;
+            width: 30%;
+            background-color: var(--secondarylighten);
+            box-shadow: var(--box-shadow1dp);
+            outline: none;
+            opacity: 0.7;
+            border-radius: 0px;
+            -webkit-transition: .2s;
+            transition: .2s;
+            margin: 10px 8px 10px 8px;
+            float: left;
+        }
+        .slide:hover {
+            opacity: 1;
+        }
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--secondary);
+            box-shadow: var(--box-shadow2dp);
+            cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--secondary);
+            box-shadow: var(--box-shadow2dp);
+            cursor: pointer;
+        }
+        hr.solid {
+            border: 1px solid var(--blacktext);
+            opacity: 0.8;
+            width: 95%;
+            margin: 0px auto 0px auto;
+        }
+        #slidertext {
+            font-size: 16px;
+            line-height: 8px;
+            padding: 0px;
+            float: left;
+            opacity: 0.8;
+        }
+
+        .progressbarbackground {
+            width: 100px;
+            background-color: var(--bg);
+            height: 24px;
+            float: right;
+            margin: 8px;
+            right: 0px;
+        }
+
+        .progressbar {
+            width: 0px;
+            height: 100%;
+            background-color: var(--secondarylighten);
+        }
+        .progress {
+            line-height: 40px;
+            margin: 0px;
+            float: right;
+            color: var(--blacktext);
+            font-family: Roboto Mono;
+        }
+        .subheader {
+            font-family: Roboto Mono;
+            font-size: 24px;
+            padding: 8px 0 0 16px;
+            color: rgb(0,0,0,0.8);
+            margin: 0px;
+        }
+
+        .opgavetext > p {
+            margin: 8px 0 8px 0;
+        }
+
+        #opgavetext > p {
+            margin: 16px 0 16px 0;
+        }
+
+        #hoverable:hover {
+            cursor: pointer;
+        }
+    </style>
+{% endblock %}
+{% block body %}
+    <strong>Deze pagina is niet gevonden, excuses voor het ongemak.</strong>
+{% endblock %}
